@@ -7,9 +7,6 @@ public interface IUesrManager {
 	/**
 	 * 注册：
 	 * 要求用户名任意
-	 * 输入手机号和邮箱号：不能重复
-	 * 输入性别（选择城市）
-	 * 输入城市
 	 * 两次输入的密码必须一致，密码不能为空
 	 * 如果注册失败，则抛出异常
 	 * @param userid
@@ -18,7 +15,7 @@ public interface IUesrManager {
 	 * @return
 	 * @throws BaseException
 	 */
-	public BeanUser reg(BeanUser user) throws BaseException;
+	public BeanUser reg(String username, String pwd,String pwd2) throws BaseException;
 	/**
 	 * 登陆
 	 * 1、如果用户不存在或者密码错误，抛出一个异常
