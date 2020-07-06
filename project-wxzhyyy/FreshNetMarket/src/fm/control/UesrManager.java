@@ -3,12 +3,13 @@ package fm.control;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import fm.util.BusinessException;
-import fm.util.DBUtil;
-import fm.util.DbException;
 import fm.itf.IUesrManager;
 import fm.model.BeanUser;
 import fm.util.BaseException;
+import fm.util.BusinessException;
+import fm.util.DBUtil;
+import fm.util.DbException;
+
 
 public class UesrManager implements IUesrManager {
 
@@ -69,8 +70,22 @@ public class UesrManager implements IUesrManager {
 	@Override
 	public BeanUser login(String userid, String pwd) throws BaseException {
 		// TODO Auto-generated method stub
-		
-		return null;
+		Connection conn=null;
+		BeanUser u=new BeanUser();
+		try {
+			conn=DBUtil.getConnection();
+			String sql="select user_id,user_name,user_pwd from user where user_id=?";
+			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+			pst.setString( 1, userid);
+			java.sql.ResultSet rs=pst.executeQuery();
+			if(!rs.next())throw new BusinessException("µÇÂ½ÕËºÅ²»´æÔÚ");
+			
+			rs.close();
+			pst.close();
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return u;
 	}
 
 	@Override
@@ -122,6 +137,8 @@ public class UesrManager implements IUesrManager {
 //			System.out.print("cheng");
 //			um.changePwd(u, "123456", "1234567", "1234567");
 //			System.out.print("cheng");
+			
+			
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
