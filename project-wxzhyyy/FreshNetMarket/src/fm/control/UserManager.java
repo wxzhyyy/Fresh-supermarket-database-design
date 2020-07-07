@@ -11,7 +11,7 @@ import fm.util.DBUtil;
 import fm.util.DbException;
 
 
-public class UesrManager implements IUesrManager {
+public class UserManager implements IUesrManager {
 
 	@Override
 	public BeanUser reg(String username, String pwd,String pwd2) throws BaseException {
@@ -79,12 +79,25 @@ public class UesrManager implements IUesrManager {
 			pst.setString( 1, userid);
 			java.sql.ResultSet rs=pst.executeQuery();
 			if(!rs.next())throw new BusinessException("µÇÂ½ÕËºÅ²»´æÔÚ");
-			
+			u.setUser_id(rs.getString(1));
+			u.setUser_name(rs.getString(2));
+			u.setUser_pwd(rs.getString(3));
 			rs.close();
 			pst.close();
-		} catch (Exception e) {
-			// TODO: handle exception
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
 		}
+		finally{
+			if(conn!=null)
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		}
+		
 		return u;
 	}
 
@@ -125,7 +138,7 @@ public class UesrManager implements IUesrManager {
 	}
 	
 	public static void main(String args[]) {
-		UesrManager um=new UesrManager();
+		UserManager um=new UserManager();
 		try {
 			/*×¢²áº¯Êý²âÊÔ*/
 //			um.reg("ckz", "123456", "123456");
