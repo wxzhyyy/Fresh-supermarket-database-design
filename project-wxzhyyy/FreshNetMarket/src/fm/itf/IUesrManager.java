@@ -35,5 +35,17 @@ public interface IUesrManager {
 	 * @param newPwd2 重复输入的新密码
 	 */
 	public void changePwd(BeanUser user, String oldPwd,String newPwd, String newPwd2)throws BaseException;
+	
+	/**
+	 * 修改个人信息
+	 * 修改用户名、性别、电话、邮箱、城市；
+	 * @param user
+	 * @param udername
+	 * @param usersex
+	 * @param userphone
+	 * @param usercity
+	 * @throws BaseException
+	 */
+	public void changeInfo(BeanUser user, String username, String usersex, String userphone, String usermail, String usercity ) throws BaseException;
 
 }

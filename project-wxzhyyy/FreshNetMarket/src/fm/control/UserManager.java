@@ -136,7 +136,35 @@ public class UserManager implements IUesrManager {
 				}
 		}
 	}
-	
+	public void changeInfo(BeanUser user, String username, String usersex , String userphone, String usermail, String usercity ) throws BaseException{
+		
+		Connection conn=null;
+		try {
+			conn=DBUtil.getConnection();
+			String sql="update user set user_name=?, user_sex=?, user_phone=?,user_email=?, user_city=? where user_id=?";
+			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+			pst.setString(1, username);
+			pst.setString(2, usersex);
+			pst.setString(3, userphone);
+			pst.setString(4, usermail);
+			pst.setString(5, usercity);
+			pst.setString(6, user.getUser_id());
+			pst.execute();
+			pst.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		}
+		finally{
+			if(conn!=null)
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		}
+	}
 	public static void main(String args[]) {
 		UserManager um=new UserManager();
 		try {
@@ -150,8 +178,10 @@ public class UserManager implements IUesrManager {
 //			System.out.print("cheng");
 //			um.changePwd(u, "123456", "1234567", "1234567");
 //			System.out.print("cheng");
-			
-			
+//			BeanUser user=new BeanUser();
+//			user.setUser_id("2");
+//			um.changeInfo(user, "bjt", "ÄÐ", "19867342243", "1237453d@163.com", "ºþÖÝ");
+//			System.out.print("cheng");
 		} catch (Exception e) {
 			// TODO: handle exception
 		}

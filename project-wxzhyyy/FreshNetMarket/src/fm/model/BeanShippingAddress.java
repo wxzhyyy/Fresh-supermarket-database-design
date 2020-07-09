@@ -1,6 +1,6 @@
 package fm.model;
 
-public class BeanShipAddress {
+public class BeanShippingAddress {
 	private String addr_id;
 	private String user_id;
 	private String province;

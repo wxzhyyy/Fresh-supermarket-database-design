@@ -18,6 +18,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
 import javax.swing.JPasswordField;
@@ -49,27 +51,27 @@ public class FrameLogin extends JFrame {
 	 * Create the frame.
 	 */
 	public FrameLogin() {
-		setTitle("\u751F\u9C9C\u8D85\u5E02");
+		setTitle("生鲜超市");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 444, 291);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		
-		JLabel lblNewLabel = new JLabel("\u8D26  \u53F7");
+		JLabel lblNewLabel = new JLabel("账  号");
 		lblNewLabel.setFont(new Font("楷体", Font.BOLD, 20));
 		
-		JLabel lblNewLabel_1 = new JLabel("\u5BC6  \u7801");
+		JLabel lblNewLabel_1 = new JLabel("密  码");
 		lblNewLabel_1.setFont(new Font("楷体", Font.BOLD, 20));
 		
-		JButton btnRegister = new JButton("\u6CE8  \u518C");
+		JButton btnRegister = new JButton("注  册");
 		btnRegister.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				registerActionPerformed(e);
 			}
 		});
 		
-		JButton btnLogin = new JButton("\u767B  \u5F55");
+		JButton btnLogin = new JButton("登  录");
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -82,11 +84,11 @@ public class FrameLogin extends JFrame {
 			}
 		});
 		
-		JButton btnCancel = new JButton("\u53D6  \u6D88");
+		JButton btnCancel = new JButton("取  消");
 		btnCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.exit(0);
-				
+				//System.exit(0);
+				setVisible(false);
 			}
 		});
 		
@@ -136,6 +138,11 @@ public class FrameLogin extends JFrame {
 					.addContainerGap())
 		);
 		contentPane.setLayout(gl_contentPane);
+		addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				System.exit(0);
+			}
+		});
 	}
 	/**
 	 * 注册事件，跳转到页面
@@ -160,9 +167,12 @@ public class FrameLogin extends JFrame {
 			if(pwd.equals(user.getUser_pwd())) {
 				BeanUser.currentLoginUser=user;
 			}
+			
 			else{
 				JOptionPane.showMessageDialog(null,  "密码错误","错误提示",JOptionPane.ERROR_MESSAGE);
 			}
+			FrmMain dlg=new FrmMain();
+			dlg.setVisible(true);
 		} catch (BaseException e1) {
 			JOptionPane.showMessageDialog(null, e1.getMessage(), "错误",JOptionPane.ERROR_MESSAGE);
 			return;
