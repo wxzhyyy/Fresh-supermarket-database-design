@@ -49,7 +49,6 @@ public class UserManager implements IUesrManager {
 			pst.setString(2, u.getUser_name());
 			pst.setString(3, u.getUser_pwd());
 			pst.setTimestamp(4,new java.sql.Timestamp(System.currentTimeMillis()));
-			pst.execute();
 			pst.close();
 		}catch (SQLException e) {
 			e.printStackTrace();
@@ -104,16 +103,16 @@ public class UserManager implements IUesrManager {
 	@Override
 	public void changePwd(BeanUser user, String oldPwd, String newPwd, String newPwd2) throws BaseException {
 		// TODO Auto-generated method stub
-		System.out.print("1");
+		//System.out.print("1");
 		if(oldPwd==null) throw new BusinessException("原始密码不能为空");
-		System.out.print("1");
+	//	System.out.print("1");
 		if(newPwd==null) throw new BusinessException("新密码不能为空");
-		System.out.print("2");
+	//	System.out.print("2");
 		if(!oldPwd.equals(user.getUser_pwd())) throw new BusinessException("原始密码错误");
-		System.out.print("1");
+	//	System.out.print("1");
 		if(!newPwd.equals(newPwd2))throw new BusinessException("两次密码输入不相同");
 		Connection conn=null;
-		System.out.print("1");
+	//	System.out.print("1");
 		try {
 			conn=DBUtil.getConnection();
 			String sql="update user set user_pwd=? where user_id=?";

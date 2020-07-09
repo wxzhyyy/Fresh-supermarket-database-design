@@ -50,4 +50,36 @@ public class CmodManager implements ICmodManager {
 		}
 		return result;	
 	}
+
+	@Override
+	public List<BeanComd> searchComd(String keyboard) throws BaseException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<BeanComd> loadComdCat(String catid) throws BaseException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void addcomd(String catid, String comdname, float comdprice, float comdvipprice, int comdquantity,
+			String comdspecif, String comddetail) throws BaseException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void modifycomd(BeanComd comd, String comdname, float comdprice, float comdvipprice, int comdquantity,
+			String comdspecif, String comddetail) throws BaseException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void deletecomd(BeanComd comd) throws BaseException {
+		// TODO Auto-generated method stub
+		
+	}
 }
