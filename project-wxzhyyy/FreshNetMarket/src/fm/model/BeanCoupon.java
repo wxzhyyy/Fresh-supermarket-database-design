@@ -1,6 +1,6 @@
 package fm.model;
 
-import java.sql.Date;
+import java.util.Date;
 
 public class BeanCoupon {
 	private String coupon_id;
@@ -8,6 +8,7 @@ public class BeanCoupon {
 	private float coupon_fit_money;
 	private float coupon_price;
 	private Date coupon_start_time;
+	private Date coupon_end_time;
 	
 	public String getCoupon_id() {
 		return coupon_id;
@@ -38,6 +39,12 @@ public class BeanCoupon {
 	}
 	public void setCoupon_start_time(Date coupon_start_time) {
 		this.coupon_start_time = coupon_start_time;
+	}
+	public Date getCoupon_end_time() {
+		return coupon_end_time;
+	}
+	public void setCoupon_end_time(Date coupon_end_time) {
+		this.coupon_end_time = coupon_end_time;
 	}
 	
 }
