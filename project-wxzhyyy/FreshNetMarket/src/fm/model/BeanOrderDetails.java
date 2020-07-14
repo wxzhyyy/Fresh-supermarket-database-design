@@ -1,5 +1,8 @@
 package fm.model;
 
+import fm.util.BaseException;
+import freshmarket.FreshMarketUtil;
+
 public class BeanOrderDetails {
 	private String order_id;
 	private String comd_id;
@@ -42,6 +45,14 @@ public class BeanOrderDetails {
 	}
 	public void setDisc_id(String disc_id) {
 		this.disc_id = disc_id;
+	}
+	public Object getCell(int col) throws BaseException {
+		// TODO Auto-generated method stub
+		if(col==0) return this.comd_id; 
+		else if(col==1) return FreshMarketUtil.ComdManager.searchComdname(comd_id);
+		else if(col==2) return this.order_price;
+		else if(col==3) return this.order_quantity;
+		else return "";
 	}
 	
 }

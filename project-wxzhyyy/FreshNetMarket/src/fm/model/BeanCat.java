@@ -23,5 +23,12 @@ public class BeanCat {
 	public void setCat_describe(String cat_describe) {
 		this.cat_describe = cat_describe;
 	}
+	public Object getCell(int col){
+		
+		if(col==0) return this.cat_id;
+		else if(col==1) return this.cat_name;
+		else if(col==2) return this.cat_describe;
+		else return "";
+	}
 	
 }

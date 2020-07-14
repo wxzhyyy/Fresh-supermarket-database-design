@@ -1,6 +1,6 @@
 package fm.model;
 
-import java.sql.Date;
+import java.util.Date;
 
 public class BeanOrder {
 	private String order_id;
@@ -11,6 +11,7 @@ public class BeanOrder {
 	private Date required_delivery_time;
 	private String addr_id;
 	private String order_status;
+	private static BeanOrder catOrder=null;
 	public String getOrder_id() {
 		return order_id;
 	}
@@ -58,6 +59,17 @@ public class BeanOrder {
 	}
 	public void setOrder_status(String order_status) {
 		this.order_status = order_status;
+	}
+	public Object getCell(int col) {
+		// TODO Auto-generated method stub
+		if(col==0) return this.order_id;
+		else if(col==1) return this.original_price;
+		else if(col==2) return this.actual_price;
+		else if(col==3) return this.coupon_id;
+		else if(col==4) return this.required_delivery_time;
+		else if(col==5) return this.addr_id;
+		else if(col==6) return this.order_status;
+		return null;
 	}
 	
 	

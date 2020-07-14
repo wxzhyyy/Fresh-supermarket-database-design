@@ -1,36 +1,64 @@
 package fm.ui;
 
+import java.awt.BorderLayout;
 import java.awt.EventQueue;
-import java.awt.Frame;
+import java.util.List;
 
 import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JMenuBar;
-import javax.swing.JMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-
+import fm.model.BeanCat;
 import fm.model.BeanComd;
-import fm.util.DBUtil;
+import fm.model.BeanUser;
+import fm.util.BaseException;
+import freshmarket.FreshMarketUtil;
 
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+
 import java.awt.event.ActionListener;
-import java.sql.Connection;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Vector;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.ActionEvent;
-import javax.swing.JButton;
-import javax.swing.JLabel;
 
-public class FrmMain extends JFrame {
+public class FrmMain extends JFrame implements ActionListener {
 
-	private JPanel contentPane;
-	private JTable comdtable;
-	private JTable currentorder;
+	private JMenuBar menuBar=new JMenuBar();
+	private JMenu mntmSearhch = new JMenu("搜索");
+	private JMenu mnmyOrder = new JMenu("订单");
+	private	JMenu mnMineInfo = new JMenu("我的");
+	private JMenuItem mntmMyBlance = new JMenuItem("我的余额");
+	private	JMenuItem mntmNewMyCoupon = new JMenuItem("我的优惠券");
+	private	JMenuItem mntmMyVIP = new JMenuItem("我的VIP");
+	private	JMenuItem mntmMyIfo = new JMenuItem("个人信息");
+	private	JMenuItem mntmShippingAddr = new JMenuItem("配送地址");
+	private JMenuItem mntmOrderdetail = new JMenuItem("历史订单");
+	private JMenuItem mntmMyEval = new JMenuItem("历史评价");
+	private JMenuItem mntmSeachComd = new JMenuItem("搜索商品");
+	private JMenuItem mntmSearchMenu = new JMenuItem("搜索菜单");
+	private JMenuItem mntmChangPwd = new JMenuItem("修改密码");
+	
+	
+	private Object tblCatTitle[]= {"分类名称","分类详情"};
+	private Object tblCatData[][];
+	DefaultTableModel tabCatModel=new DefaultTableModel();
+	private JTable dataTableCat=new JTable(tabCatModel);
+
+
+	
+	private Object tblCatComdTitle[]= {"商品编号","商品名称","商品价格","VIP价格","库存"};
+	private Object tblCatComdData[][];
+	DefaultTableModel tabCatComdModel=new DefaultTableModel();
+	private JTable dataTableCatComd=new JTable(tabCatComdModel);
+	
+	BeanCat curCat=null;
+	List<BeanCat> allCat=null;
+	List<BeanComd> allCatComd=null;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -47,144 +75,192 @@ public class FrmMain extends JFrame {
 		});
 	}
 
+	private FrmLogin dlgLogin=null;
+	private JMenuItem mntmNewCart = new JMenuItem("购物车");
+	private JMenuItem mntmSystemCoupon = new JMenuItem("领取优惠券");
+	private JMenuItem mntmpromotion = new JMenuItem("促销商品");
+
+	
 	/**
 	 * Create the frame.
 	 */
-	public FrmMain() {
-		setExtendedState(Frame.MAXIMIZED_BOTH);
-		
-		setTitle("生鲜超市");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1546, 941);
-		
-		JMenuBar menuBar = new JMenuBar();
-		setJMenuBar(menuBar);
-		
-		JMenu homepage = new JMenu("\u9996\u9875");
-		menuBar.add(homepage);
-		
-		JMenuItem mntmNewMenuItem_5 = new JMenuItem("\u6EE1\u6298\u6D3B\u52A8\u533A");
-		homepage.add(mntmNewMenuItem_5);
-		
-		JMenuItem mntmNewMenuItem_6 = new JMenuItem("\u9650\u65F6\u4FC3\u9500\u533A");
-		homepage.add(mntmNewMenuItem_6);
-		
-		JMenu classifypage = new JMenu("\u5206\u7C7B\u67E5\u8BE2");
-		menuBar.add(classifypage);
-		
-		JMenu orderpage = new JMenu("\u5355\u54C1\u67E5\u8BE2");
-		menuBar.add(orderpage);
-		
-		JMenu mypage = new JMenu("我的");
-		menuBar.add(mypage);
-		
-		JMenuItem mntmNewMenuItem_1 = new JMenuItem("\u4F59\u989D\u67E5\u8BE2");
-		mypage.add(mntmNewMenuItem_1);
-		
-		JMenuItem mntmNewMenuItem_3 = new JMenuItem("\u4F18\u60E0\u5238\u67E5\u8BE2");
-		mypage.add(mntmNewMenuItem_3);
-		
-		JMenuItem mntmNewMenuItem_2 = new JMenuItem("\u4F1A\u5458\u67E5\u8BE2");
-		mypage.add(mntmNewMenuItem_2);
-		
-		JMenuItem mntmNewMenuItem = new JMenuItem("\u8BA2\u5355\u67E5\u8BE2");
-		mypage.add(mntmNewMenuItem);
-		
-		JMenuItem mntmUserInfoManager = new JMenuItem("个人信息");
-		mntmUserInfoManager.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				FrmUserInfoManager dlg=new FrmUserInfoManager();
-				setVisible(true);
-			}
-		});
-		mypage.add(mntmUserInfoManager);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentPane);
-		contentPane.setLayout(null);
-		
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 63, 741, 813);
-		contentPane.add(scrollPane);
-		
-		comdtable = new JTable();
-		scrollPane.setViewportView(comdtable);
-		comdtable.setModel(new DefaultTableModel(
-			new Object[][] {
-			},
-			new String[] {
-				"\u5546\u54C1\u540D\u79F0", "\u5546\u54C1\u4ECB\u7ECD", "\u4EF7   \u683C", "\u4F1A\u5458\u4EF7\u683C"
-			}
-		));
-		
-		JButton btnConfirmBuy = new JButton("\u786E\u8BA4\u8D2D\u4E70");
-		btnConfirmBuy.setBounds(1333, 14, 97, 24);
-		contentPane.add(btnConfirmBuy);
-		
-		JLabel lblNewLabel = new JLabel("\u5F53\u524D\u8BA2\u5355");
-		lblNewLabel.setBounds(861, 10, 97, 33);
-		contentPane.add(lblNewLabel);
-		
-		JScrollPane scrollPane_1 = new JScrollPane();
-		scrollPane_1.setToolTipText("");
-		scrollPane_1.setBounds(815, 63, 691, 813);
-		contentPane.add(scrollPane_1);
-		
-		currentorder = new JTable();
-		currentorder.setModel(new DefaultTableModel(
-			new Object[][] {
-			},
-			new String[] {
-				"New column", "New column", "New column", "New column"
-			}
-		));
-		scrollPane_1.setViewportView(currentorder);
-		
-		JButton btnDeleteComdinOrder = new JButton("\u5220  \u9664");
-		btnDeleteComdinOrder.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		btnDeleteComdinOrder.setBounds(1064, 14, 97, 24);
-		contentPane.add(btnDeleteComdinOrder);
-		
-		JLabel lblNewLabel_1 = new JLabel("\u63A8\u8350\u5546\u54C1");
-		lblNewLabel_1.setBounds(89, 14, 62, 24);
-		contentPane.add(lblNewLabel_1);
-		
-		JButton btnAddComdOrder = new JButton("\u52A0\u5165\u8BA2\u5355");
-		btnAddComdOrder.setBounds(333, 15, 97, 23);
-		contentPane.add(btnAddComdOrder);
-		
-		JButton btnSearchComd = new JButton("\u67E5\u8BE2\u5546\u54C1");
-		btnSearchComd.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		btnSearchComd.setBounds(592, 15, 97, 23);
-		contentPane.add(btnSearchComd);
-		this.fillComdTable(new BeanComd());
-	}
-	private void fillComdTable(BeanComd comd) {
-		DefaultTableModel dtm=(DefaultTableModel) comdtable.getModel();
-		Connection conn=null;
-		try {
-			conn=DBUtil.getConnection();
-			List<BeanComd> result=new ArrayList<BeanComd>();
-			result=freshmarket.FreshMarketUtil.cmodManager.loadall();
-			for(int i=0; i<result.size();i++) {
-				BeanComd c=new BeanComd();
-				c=result.get(i);
-				Vector v=new Vector();
-				v.add(c.getComd_name());
-				v.add(c.getComd_details());
-				v.add(c.getComd_price());
-				v.add(c.getComd_vip_price());
-				dtm.addRow(v);
-			}
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
 	
+	public FrmMain() {
+		
+		this.setTitle("生鲜超市");
+		dlgLogin=new FrmLogin(this,"登陆",true);
+		dlgLogin.setVisible(true);
+		if(BeanUser.currentLoginUser.getUser_id()==null)
+			this.setVisible(false);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		setJMenuBar(menuBar);
+		menuBar.add(mntmSearhch);
+		
+		mntmSearhch.add(mntmSeachComd);
+		
+		mntmSearhch.add(mntmSystemCoupon);
+		
+		
+		mntmSearhch.add(mntmSearchMenu);
+		
+		mntmSearhch.add(mntmpromotion);
+		menuBar.add(mnmyOrder);
+		
+		mnmyOrder.add(mntmNewCart);
+		mnmyOrder.add(mntmOrderdetail);
+		mnmyOrder.add(mntmMyEval);
+		menuBar.add(mnMineInfo);
+		mnMineInfo.add(mntmMyBlance);
+		mnMineInfo.add(mntmNewMyCoupon);
+		mnMineInfo.add(mntmMyVIP);
+		mnMineInfo.add(mntmMyIfo);
+		mnMineInfo.add(mntmShippingAddr);
+		
+		mnMineInfo.add(mntmChangPwd);
+		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		
+		this.mntmSearhch.addActionListener(this);
+		this.mnMineInfo.addActionListener(this);
+		this.mntmShippingAddr.addActionListener(this);
+		this.mntmMyIfo.addActionListener(this);
+		this.mntmNewMyCoupon.addActionListener(this);
+		this.mnmyOrder.addActionListener(this);
+		this.mntmMyVIP.addActionListener(this);
+		this.mntmOrderdetail.addActionListener(this);
+		this.mntmMyEval.addActionListener(this);
+		this.mntmMyIfo.addActionListener(this);
+		this.mntmMyBlance.addActionListener(this);
+		this.mntmSeachComd.addActionListener(this);
+		this.mntmSearchMenu.addActionListener(this);
+		this.mntmNewCart.addActionListener(this);
+		this.mntmSystemCoupon.addActionListener(this);
+		this.mntmChangPwd.addActionListener(this);
+		
+		this.getContentPane().add(new JScrollPane(this.dataTableCat), BorderLayout.WEST);
+	    this.dataTableCat.addMouseListener(new MouseAdapter (){
+			public void mouseClicked(MouseEvent e) {
+				int i=FrmMain.this.dataTableCat.getSelectedRow();
+				if(i<0) {
+					return;
+				}
+				FrmMain.this.reloadCatComdTabel(i);
+			}
+	    	
+	    });
+	    
+	    this.getContentPane().add(new JScrollPane(this.dataTableCatComd), BorderLayout.CENTER);
+	    
+	    this.reloadCatTable();
+	    this.dataTableCatComd.addMouseListener(new MouseAdapter (){
+			public void mouseClicked(MouseEvent e) {
+				int i=FrmMain.this.dataTableCatComd.getSelectedRow();
+				if(i<0) {
+					return;
+				}
+				BeanComd.currentComd=allCatComd.get(i);
+				new FrmComdDetails().setVisible(true);
+			}
+	    	
+	    });
+	    
 	}
+	private void reloadCatTable(){//这是测试数据，需要用实际数替换
+		try {
+			allCat=FreshMarketUtil.CatManager.loadallCat();
+		} catch (BaseException e) {
+			JOptionPane.showMessageDialog(null, e.getMessage(), "错误",JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		tblCatData =  new Object[allCat.size()][tblCatTitle.length];
+		for(int i=0;i<allCat.size();i++){
+			for(int j=0;j<tblCatTitle.length;j++)
+				tblCatData[i][j]=allCat.get(i).getCell(j);
+		}
+		tabCatModel.setDataVector(tblCatData,tblCatTitle);
+		this.dataTableCat.validate();
+		this.dataTableCat.repaint();
+	}
+	private void reloadCatComdTabel(int planIdx){
+		if(planIdx<0) return;
+		curCat=allCat.get(planIdx);
+		try {
+			allCatComd=FreshMarketUtil.ComdManager.loadComdCat(curCat.getCat_id());
+		} catch (BaseException e) {
+			JOptionPane.showMessageDialog(null, e.getMessage(), "错误",JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		tblCatComdData =new Object[allCatComd.size()][tblCatComdTitle.length];
+		for(int i=0;i<allCatComd.size();i++){
+			for(int j=0;j<tblCatComdTitle.length;j++)
+				tblCatComdData[i][j]=allCatComd.get(i).getCell(j);
+		}
+		
+		tabCatComdModel.setDataVector(tblCatComdData,tblCatComdTitle);
+		this.dataTableCatComd.validate();
+		this.dataTableCatComd.repaint();
+	}
+	
+	
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		if(e.getSource()==this.mntmShippingAddr) {
+			FrmShippingAddr dlg=new FrmShippingAddr();
+			dlg.setVisible(true);
+		}
+		else if(e.getSource()==this.mntmSeachComd){
+			FrmSearchComd dlg=new FrmSearchComd();
+			dlg.setVisible(true);
+		}
+		else if (e.getSource()==this.mntmOrderdetail) {
+			FrmOrderManager dlg=new FrmOrderManager();
+			dlg.setVisible(true);
+		}
+		else if (e.getSource()==this.mntmMyEval) {
+			FrmMyEvalList dlg=new FrmMyEvalList();
+			dlg.setVisible(true);
+		}
+		else if (e.getSource()==this.mntmSearchMenu) {
+			FrmMenuList dlg=new FrmMenuList();
+			dlg.setVisible(true);
+		}
+		else if (e.getSource()==this.mntmMyBlance) {
+			FrmBalanceManager dlg=new FrmBalanceManager();
+			dlg.setVisible(true);
+		}
+		else if (e.getSource()==this.mntmNewMyCoupon) {
+			FrmMyCoupon dlg=new FrmMyCoupon();
+			dlg.setVisible(true);
+		}
+		else if (e.getSource()==this.mntmMyVIP) {
+			FrmVIPManager dlg=new FrmVIPManager();
+			dlg.setVisible(true);
+		}
+		else if (e.getSource()==this.mntmMyIfo) {
+			FrmUserInfoManager dlg=new FrmUserInfoManager();
+			dlg.setVisible(true);
+		}
+		else if (e.getSource()==this.mntmChangPwd) {
+			FrmChangePwd dlg=new FrmChangePwd();
+			dlg.setVisible(true);
+		}
+		else if (e.getSource()==this.mntmNewCart) {
+			FrmCart dlg = null;
+			try {
+				dlg = new FrmCart();
+			} catch (BaseException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			dlg.setVisible(true);
+		}
+		  else if (e.getSource()==this.mntmSystemCoupon) {
+			FrmSystemCoupon dlg=new FrmSystemCoupon();
+			dlg.setVisible(true);
+		}
+		
+	}
+
 }

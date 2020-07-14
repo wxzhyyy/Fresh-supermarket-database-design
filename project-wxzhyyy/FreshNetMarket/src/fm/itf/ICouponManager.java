@@ -1,7 +1,6 @@
 package fm.itf;
 
-import java.sql.Timestamp;
-import java.util.Date;
+
 import java.util.List;
 
 import fm.model.BeanCoupon;
@@ -29,32 +28,31 @@ public interface ICouponManager {
 	 * z管理员增加优惠券
 	 * 输入优惠券的简介，适用价格，优惠券优惠额，起止时间
 	 * @param couponcontent
-	 * @param couponfitmoney
+	 * @param fitprice
 	 * @param couponprice
 	 * @param couponstarttime
 	 * @param couponendtime
 	 * @throws BaseException
 	 */
 	
-	public void addSystemCoupons(String couponcontent, float couponfitmoney, float couponprice,String couponstarttime, String couponendtime) throws BaseException;
-/**
- * 管理员删除系统优惠券
- * 还有被领取但未使用的不能被删除
- * @param coupon
- * @throws BaseException
- */
+	public void addSystemCoupons(String couponcontent, String fitprice, String couponprice,String couponstarttime, String couponendtime) throws BaseException;
+	/**
+	 * 管理员删除系统优惠券
+	 * @param coupon
+	 * @throws BaseException
+	 */
 	public void deleteSystemCoupons(BeanCoupon coupon) throws BaseException;
 	/**
 	 * 
 	 * @param coupon
 	 * @param couponcontent
-	 * @param couponfitmoney
+	 * @param fitprice
 	 * @param couponprice
 	 * @param couponstarttime
 	 * @param couponendtime
 	 * @throws BaseException
 	 */
-	public void modifySystemCoupons(BeanCoupon coupon,String couponcontent, float couponfitmoney, float couponprice,String couponstarttime, String couponendtime)throws BaseException;
+	public void modifySystemCoupons(BeanCoupon coupon,String couponcontent, String fitprice, String couponprice,String couponstarttime, String couponendtime)throws BaseException;
 	
 	/**
 	 * 用户选择获得优惠券

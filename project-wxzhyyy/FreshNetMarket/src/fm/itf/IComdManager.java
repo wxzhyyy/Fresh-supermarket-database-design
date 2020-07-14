@@ -6,7 +6,7 @@ import java.util.List;
 
 import fm.model.BeanComd;
 
-public interface ICmodManager {
+public interface IComdManager {
 	/**
 	 * 返回所有商品
 	 * @return
@@ -25,6 +25,14 @@ public interface ICmodManager {
 	public List<BeanComd> searchComd(String keyboard) throws BaseException;
 	
 	/**
+	 * 返回商品名称
+	 * @param comd_id
+	 * @return
+	 * @throws BaseException
+	 */
+	public String searchComdname(String comd_id) throws BaseException;
+	
+	/**
 	 * 搜索某一种类别的所有商品
 	 * @param catid
 	 * @return
@@ -38,6 +46,7 @@ public interface ICmodManager {
 	 * 添加商品
 	 * 管理员执行
 	 * 判断商品名称是否重复，若有重复则无法添加
+	 * @param catid
 	 * @param comdname
 	 * @param comdprice
 	 * @param comdvipprice
@@ -46,7 +55,7 @@ public interface ICmodManager {
 	 * @param comddetail
 	 * @throws BaseException
 	 */
-	public void addcomd(String catid, String comdname, float comdprice, float comdvipprice, int comdquantity, String comdspecif, String comddetail) throws BaseException;
+	public void addcomd(String catid,String comdname, String comdprice, String comdvipprice, String comdquantity) throws BaseException;
 	
 	/**
 	 * 修改商品信息
@@ -59,7 +68,7 @@ public interface ICmodManager {
 	 * @param comddetail
 	 * @throws BaseException
 	 */
-	public void modifycomd(BeanComd comd,String comdname, float comdprice, float comdvipprice, int comdquantity, String comdspecif, String comddetail) throws BaseException;
+	public void modifycomd(BeanComd comd,String catid,String comdname, String comdprice, String comdvipprice, String comdquantity) throws BaseException;
 	
 	/**
 	 * 删除商品

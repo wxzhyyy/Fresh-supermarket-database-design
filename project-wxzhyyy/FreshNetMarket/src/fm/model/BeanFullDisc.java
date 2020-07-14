@@ -1,10 +1,10 @@
 package fm.model;
 
-import java.sql.Date;
+import java.util.Date;
 
 public class BeanFullDisc {
 	private String disc_id;
-	private String user_id;
+	private String disc_content;
 	private int disc_fitnumber;
 	private float disc_discount;
 	private Date disc_start_time;
@@ -15,11 +15,11 @@ public class BeanFullDisc {
 	public void setDisc_id(String disc_id) {
 		this.disc_id = disc_id;
 	}
-	public String getUser_id() {
-		return user_id;
+	public String getDisc_content() {
+		return disc_content;
 	}
-	public void setUser_id(String user_id) {
-		this.user_id = user_id;
+	public void setDisc_content(String disc_content) {
+		this.disc_content = disc_content;
 	}
 	public int getDisc_fitnumber() {
 		return disc_fitnumber;
@@ -45,5 +45,16 @@ public class BeanFullDisc {
 	public void setDisc_end_time(Date disc_end_time) {
 		this.disc_end_time = disc_end_time;
 	}
+	public Object getAdminCell(int col) {
+		// TODO Auto-generated method stub
+		if(col==0) return this.disc_id;
+		else if(col==1) return this.disc_content;
+		else if(col==2) return this.disc_fitnumber;
+		else if(col==3) return this.disc_discount;
+		else if(col==4) return this.disc_start_time;
+		else if(col==5) return this.disc_end_time;
+		else return "";
+	}
+
 	
 }

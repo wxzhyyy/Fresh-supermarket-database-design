@@ -32,7 +32,7 @@ public interface IEvaluationManager {
 	 * @param evalstar
 	 * @throws BaseException
 	 */
-	public void addComdEval(String userid, String comdid, String evalcontent, String evalstar) throws BaseException;
+	public void addComdEval(String userid, String comdid, String evalcontent, int evalstar) throws BaseException;
 
 	/**
 	 * É¾³ýÆÀ¼Û
@@ -49,7 +49,7 @@ public interface IEvaluationManager {
 	 * @param evalstar
 	 * @throws BaseException
 	 */
-	public void modifyComdEval(BeanEvaluation eva, String evalcontent, String evalstar) throws BaseException;
+	public void modifyComdEval(BeanEvaluation eva, String evalcontent, int evalstar) throws BaseException;
 	
 	
 }

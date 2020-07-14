@@ -13,6 +13,7 @@ import fm.util.DbException;
 
 public class UserManager implements IUesrManager {
 
+	
 	@Override
 	public BeanUser reg(String username, String pwd,String pwd2) throws BaseException {
 		// TODO Auto-generated method stub
@@ -22,24 +23,24 @@ public class UserManager implements IUesrManager {
 		BeanUser u=new BeanUser();
 		//System.out.print("1");
 		try {
-			//System.out.print("2");
+			//System.out.println("2");
 			conn=DBUtil.getConnection();
 			u.setUser_name(username);
 			u.setUser_pwd(pwd);
-			String sql="select max(user_id) from user";
-			//System.out.print("3");
+			String sql="select max(user_id+0) from user";
+			//System.out.println("3");
 			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
 			java.sql.ResultSet rs=pst.executeQuery();
-			//System.out.print("4");
+		//	System.out.println("4");
 			if (rs.next()) {
-				//System.out.print("5");
+			//	System.out.println("5");
 				u.setUser_id(rs.getString(1));
 				//System.out.print("5");
 				int num = Integer.parseInt(u.getUser_id().trim());
 				//System.out.print("5");
 				num = num +1;
 			    u.setUser_id(String.valueOf(num));
-			   // System.out.print("5");
+			   // System.out.println(num);
 			}else {
 				u.setUser_id("1");
 			}
@@ -49,6 +50,7 @@ public class UserManager implements IUesrManager {
 			pst.setString(2, u.getUser_name());
 			pst.setString(3, u.getUser_pwd());
 			pst.setTimestamp(4,new java.sql.Timestamp(System.currentTimeMillis()));
+			pst.execute();
 			pst.close();
 		}catch (SQLException e) {
 			e.printStackTrace();
@@ -67,15 +69,15 @@ public class UserManager implements IUesrManager {
 	}
 
 	@Override
-	public BeanUser login(String userid, String pwd) throws BaseException {
+	public BeanUser login(String username) throws BaseException {
 		// TODO Auto-generated method stub
 		Connection conn=null;
 		BeanUser u=new BeanUser();
 		try {
 			conn=DBUtil.getConnection();
-			String sql="select user_id,user_name,user_pwd from user where user_id=?";
+			String sql="select user_id,user_name,user_pwd from user where user_name=?";
 			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
-			pst.setString( 1, userid);
+			pst.setString( 1, username);
 			java.sql.ResultSet rs=pst.executeQuery();
 			if(!rs.next())throw new BusinessException("登陆账号不存在");
 			u.setUser_id(rs.getString(1));
@@ -105,11 +107,14 @@ public class UserManager implements IUesrManager {
 		// TODO Auto-generated method stub
 		//System.out.print("1");
 		if(oldPwd==null) throw new BusinessException("原始密码不能为空");
-	//	System.out.print("1");
+		//System.out.print("1");
 		if(newPwd==null) throw new BusinessException("新密码不能为空");
-	//	System.out.print("2");
+		//System.out.print("2");
+		//System.out.print(oldPwd);
+		//System.out.print("3");
+		//System.out.print(user.getUser_pwd());
 		if(!oldPwd.equals(user.getUser_pwd())) throw new BusinessException("原始密码错误");
-	//	System.out.print("1");
+		//System.out.print("1");
 		if(!newPwd.equals(newPwd2))throw new BusinessException("两次密码输入不相同");
 		Connection conn=null;
 	//	System.out.print("1");
@@ -168,8 +173,8 @@ public class UserManager implements IUesrManager {
 		UserManager um=new UserManager();
 		try {
 			/*注册函数测试*/
-//			um.reg("ckz", "123456", "123456");
-//			System.out.print("cheng");
+			um.reg("ckz", "123456", "123456");
+			System.out.print("cheng");
 			/*修改密码函数测试*/
 //			BeanUser u=new BeanUser();
 //			u.setUser_id("2");

@@ -8,6 +8,7 @@ import java.util.List;
 import fm.itf.IShippingAddressManager;
 import fm.model.BeanShippingAddress;
 import fm.util.BaseException;
+import fm.util.BusinessException;
 import fm.util.DBUtil;
 import fm.util.DbException;
 
@@ -20,13 +21,14 @@ public class ShippingAddressManager implements IShippingAddressManager{
 		Connection conn=null;
 		try {
 			conn=DBUtil.getConnection();
-			String sql="select * from shipping_address";
+			String sql="select * from shipping_address where user_id=?";
 			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+			pst.setString(1, userid);
 			java.sql.ResultSet rs=pst.executeQuery();
 			while(rs.next()) {
 				BeanShippingAddress sa=new BeanShippingAddress();
-				sa.setUser_id(rs.getString(1));
-				sa.setAddr_id(rs.getString(2));
+				sa.setAddr_id(rs.getString(1));
+				sa.setUser_id(rs.getString(2));
 				sa.setProvince(rs.getString(3));
 				sa.setCity(rs.getString(4));
 				sa.setCell(rs.getString(5));
@@ -56,6 +58,10 @@ public class ShippingAddressManager implements IShippingAddressManager{
 	@Override
 	public void addShippingAddress(String userid, String province, String city, String cell, String address, String linkman, String phone) throws BaseException {
 		// TODO Auto-generated method stub
+		if (province==null||city==null||cell==null||address==null) throw new BusinessException("地址不能为空");
+		if (province.equals("")||city.equals("")||cell.equals("")||address.equals("")) throw new BusinessException("地址不能为空");
+		if(linkman==null||linkman.equals("")) throw new BusinessException("联系人不能为空");
+		if (phone==null||phone.equals(""))throw new BusinessException("联系电话不能为空") ;
 		BeanShippingAddress sa=new BeanShippingAddress();
 		sa.setUser_id(userid);
 		sa.setAddress(address);
@@ -67,11 +73,13 @@ public class ShippingAddressManager implements IShippingAddressManager{
 		Connection conn=null;
 		try {
 			conn=DBUtil.getConnection();
-			String sql="select max(addr_id) from shipping_address where user_id=?";
+			String sql="select max(addr_id+0) from shipping_address where user_id=?";
 			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
 			pst.setString(1, userid);
 			java.sql.ResultSet rs=pst.executeQuery();
-			if (rs.next()) {
+			rs.next();
+			if (rs.getString(1) != null) {
+				//System.out.print(rs.getString(1));
 				sa.setAddr_id(rs.getString(1));
 				int num = Integer.parseInt(sa.getAddr_id().trim());
 				num = num +1;
@@ -108,7 +116,7 @@ public class ShippingAddressManager implements IShippingAddressManager{
 	}
 
 	@Override
-	public void delectShippingAddress(BeanShippingAddress sa) throws BaseException {
+	public void deleteShippingAddress(BeanShippingAddress sa) throws BaseException {
 		// TODO Auto-generated method stub
 		Connection conn=null;
 		try {
@@ -118,6 +126,7 @@ public class ShippingAddressManager implements IShippingAddressManager{
 			pst.setString(1, sa.getUser_id());
 			pst.setString(2, sa.getAddr_id());
 			pst.execute();
+			System.out.println("执行删除");
 			pst.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -138,19 +147,36 @@ public class ShippingAddressManager implements IShippingAddressManager{
 	@Override
 	public void modifyShippingAddress(BeanShippingAddress sa, String province, String city, String cell, String address, String linkman, String phone) throws BaseException {
 		// TODO Auto-generated method stub
+		if(province!=null&&!province.equals("")) {
+			sa.setProvince(province);
+		}
+		if(city!=null&&!city.equals("")) {
+			sa.setCity(city);
+		}
+		if(cell!=null&&!cell.equals("")) {
+			sa.setCell(cell);
+		}
+		if(address!=null&&!address.equals("")) {
+			sa.setAddress(address);
+		}
+		if(linkman!=null&&!linkman.equals("")) {
+			sa.setLinkman(linkman);
+		}
+		if(phone!=null&&!phone.equals("")) {
+			sa.setPhone(phone);
+		}
 		Connection conn=null;
 		try {
 			conn=DBUtil.getConnection();
-			String sql="update shipping_address set province=?, city=?,cell=?, address=?, linkman=?, phone=? where user_id=? and addr_id=?";
+			String sql="update shipping_address set province=?, city=?,cell=?, address=?, linkman=?, phone=? where addr_id=?";
 			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
-			pst.setString(1, province);
-			pst.setString(2, city);
-			pst.setString(3, cell);
-			pst.setString(4, address);
-			pst.setString(5, linkman);
-			pst.setString(6, phone);
-			pst.setString(7, sa.getUser_id());
-			pst.setString(8, sa.getAddr_id());
+			pst.setString(1, sa.getProvince());
+			pst.setString(2, sa.getCity());
+			pst.setString(3, sa.getCell());
+			pst.setString(4, sa.getAddress());
+			pst.setString(5, sa.getLinkman());
+			pst.setString(6, sa.getPhone());
+			pst.setString(7, sa.getAddr_id());
 			pst.execute();
 			pst.close();
 		} catch (SQLException e) {
@@ -191,8 +217,8 @@ public class ShippingAddressManager implements IShippingAddressManager{
 			sa.setUser_id("1");
 			sa.setAddr_id("2");
 //			sam.modifyShippingAddress(sa, "浙江", "杭州", "建德", "大同", "小猪", "15628356547");
-//			System.out.print("cheng");
-			sam.delectShippingAddress(sa);
+			System.out.print("cheng");
+			sam.deleteShippingAddress(sa);
 			System.out.print("cheng");
 		} catch (Exception e) {
 			// TODO: handle exception

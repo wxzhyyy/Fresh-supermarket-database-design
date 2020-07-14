@@ -1,6 +1,6 @@
 package fm.model;
 
-import java.sql.Date;
+import java.util.Date;
 
 public class BeanEvaluation {
 	private String comd_id;
@@ -46,5 +46,14 @@ public class BeanEvaluation {
 	}
 	public void setEval_pic(byte[] eval_pic) {
 		this.eval_pic = eval_pic;
+	}
+	public Object getCell(int col) {
+		// TODO Auto-generated method stub
+		if(col==0) return this.comd_id;
+		else if(col==1) return this.user_id;
+		else if(col==2) return this.eval_content;
+		else if(col==3)return this.eval_time;
+		else if(col==4) return this.eval_star;
+		else return "";
 	}
 }

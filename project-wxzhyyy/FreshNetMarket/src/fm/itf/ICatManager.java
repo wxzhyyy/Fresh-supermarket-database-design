@@ -1,5 +1,7 @@
 package fm.itf;
 
+import java.util.List;
+
 import fm.model.BeanCat;
 import fm.util.BaseException;
 
@@ -31,5 +33,10 @@ public interface ICatManager {
 	 * @throws BaseException
 	 */
 	public void modifyCat(BeanCat cat, String catname, String catdescribe) throws BaseException;
-	
+	/**
+	 * 返回所有类别
+	 * @return
+	 * @throws BaseException
+	 */
+	public List<BeanCat> loadallCat() throws BaseException;
 }

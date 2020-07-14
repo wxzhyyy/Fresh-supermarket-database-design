@@ -11,6 +11,10 @@ public class BeanComd {
 	private int comd_quantity;
 	private String comd_specification;
 	private String comd_details;
+	
+	public static BeanComd currentComd=null;
+	
+	
 	public String getComd_id() {
 		return comd_id;
 	}
@@ -64,6 +68,17 @@ public class BeanComd {
 	}
 	public void setComd_details(String comd_details) {
 		this.comd_details = comd_details;
+	}
+	public Object getCell(int col) {
+		// TODO Auto-generated method stub
+		if(col==0) return this.comd_id;
+		else if(col==1) return this.comd_name;
+		else if(col==2) return this.comd_price;
+		else if(col==3) return this.comd_vip_price;
+		else if(col==4) return this.comd_quantity;
+		else if(col==5) return this.cat_id;
+		else if(col==6) return this.promotion_id;
+		else return "";
 	}
 	
 }

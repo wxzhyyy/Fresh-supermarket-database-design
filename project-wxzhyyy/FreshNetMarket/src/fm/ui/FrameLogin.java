@@ -24,6 +24,7 @@ import java.awt.event.ActionEvent;
 import java.awt.Font;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.JRadioButton;
 
 public class FrameLogin extends JFrame {
 
@@ -40,6 +41,7 @@ public class FrameLogin extends JFrame {
 				try {
 					FrameLogin frame = new FrameLogin();
 					frame.setVisible(true);
+					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -53,16 +55,16 @@ public class FrameLogin extends JFrame {
 	public FrameLogin() {
 		setTitle("…˙œ ≥¨ –");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 444, 291);
+		setBounds(100, 100, 471, 313);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		
 		JLabel lblNewLabel = new JLabel("’À  ∫≈");
-		lblNewLabel.setFont(new Font("ø¨ÃÂ", Font.BOLD, 20));
+		lblNewLabel.setFont(new Font("ÀŒÃÂ", Font.PLAIN, 16));
 		
 		JLabel lblNewLabel_1 = new JLabel("√‹  ¬Î");
-		lblNewLabel_1.setFont(new Font("ø¨ÃÂ", Font.BOLD, 20));
+		lblNewLabel_1.setFont(new Font("ÀŒÃÂ", Font.PLAIN, 16));
 		
 		JButton btnRegister = new JButton("◊¢  ≤·");
 		btnRegister.addActionListener(new ActionListener() {
@@ -96,6 +98,12 @@ public class FrameLogin extends JFrame {
 		
 		edtUserID = new JTextField();
 		edtUserID.setColumns(10);
+		
+		JLabel lblNewLabel_2 = new JLabel("\u7528\u6237\u7C7B\u578B");
+		
+		JRadioButton rdbtnNewRadioButton = new JRadioButton("\u7BA1\u7406\u5458");
+		
+		JRadioButton rdbtnNewRadioButton_1 = new JRadioButton("\u7528\u6237");
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
@@ -104,33 +112,45 @@ public class FrameLogin extends JFrame {
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addGap(53)
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addComponent(lblNewLabel_1, GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
-								.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 86, GroupLayout.PREFERRED_SIZE))
+								.addComponent(lblNewLabel_1, GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
+								.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 86, GroupLayout.PREFERRED_SIZE)
+								.addComponent(lblNewLabel_2, GroupLayout.PREFERRED_SIZE, 58, GroupLayout.PREFERRED_SIZE))
 							.addPreferredGap(ComponentPlacement.RELATED)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-								.addComponent(edtUserID, GroupLayout.DEFAULT_SIZE, 223, Short.MAX_VALUE)
-								.addComponent(edtPwd, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 223, Short.MAX_VALUE)))
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+								.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING, false)
+									.addComponent(edtPwd, Alignment.LEADING)
+									.addComponent(edtUserID, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE))
+								.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+									.addComponent(btnCancel, GroupLayout.PREFERRED_SIZE, 97, GroupLayout.PREFERRED_SIZE)
+									.addGroup(gl_contentPane.createSequentialGroup()
+										.addComponent(rdbtnNewRadioButton, GroupLayout.PREFERRED_SIZE, 127, GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(ComponentPlacement.RELATED)
+										.addComponent(rdbtnNewRadioButton_1, GroupLayout.PREFERRED_SIZE, 127, GroupLayout.PREFERRED_SIZE))))
+							.addPreferredGap(ComponentPlacement.RELATED, 36, Short.MAX_VALUE))
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addGap(30)
 							.addComponent(btnRegister, GroupLayout.PREFERRED_SIZE, 97, GroupLayout.PREFERRED_SIZE)
 							.addGap(45)
-							.addComponent(btnLogin, GroupLayout.PREFERRED_SIZE, 97, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
-							.addComponent(btnCancel, GroupLayout.PREFERRED_SIZE, 97, GroupLayout.PREFERRED_SIZE)))
+							.addComponent(btnLogin, GroupLayout.PREFERRED_SIZE, 97, GroupLayout.PREFERRED_SIZE)))
 					.addContainerGap())
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGap(66)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
-						.addComponent(edtUserID)
-						.addComponent(lblNewLabel, GroupLayout.DEFAULT_SIZE, 26, Short.MAX_VALUE))
-					.addGap(43)
+					.addGap(33)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblNewLabel_2)
+						.addComponent(rdbtnNewRadioButton)
+						.addComponent(rdbtnNewRadioButton_1))
+					.addGap(18)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
+						.addComponent(edtUserID, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(36)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblNewLabel_1)
-						.addComponent(edtPwd, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
+						.addComponent(edtPwd, GroupLayout.PREFERRED_SIZE, 22, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED, 75, Short.MAX_VALUE)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
 						.addComponent(btnRegister)
 						.addComponent(btnLogin)
@@ -150,8 +170,8 @@ public class FrameLogin extends JFrame {
 	 */
 	private void registerActionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		FrmRegister frg=new FrmRegister();
-		frg.setVisible(true);
+		//FrmRegister frg=new FrmRegister(modalBlocker, title, rootPaneCheckingEnabled);
+		//frg.setVisible(true);
 	}
 
 	/**
@@ -163,21 +183,20 @@ public class FrameLogin extends JFrame {
 		String userid=this.edtUserID.getText();
 		String pwd=new String(this.edtPwd.getPassword());
 		try {
-			BeanUser user= FreshMarketUtil.userManager.login(userid, pwd);
+			BeanUser user= FreshMarketUtil.userManager.login(userid);
 			if(pwd.equals(user.getUser_pwd())) {
 				BeanUser.currentLoginUser=user;
+				FrmMain frame = new FrmMain();
+				frame.setVisible(true);
 			}
 			
 			else{
 				JOptionPane.showMessageDialog(null,  "√‹¬Î¥ÌŒÛ","¥ÌŒÛÃ· æ",JOptionPane.ERROR_MESSAGE);
 			}
-			FrmMain dlg=new FrmMain();
-			dlg.setVisible(true);
 		} catch (BaseException e1) {
 			JOptionPane.showMessageDialog(null, e1.getMessage(), "¥ÌŒÛ",JOptionPane.ERROR_MESSAGE);
-			return;
 		}
-		this.setVisible(false);
+		System.exit(0);
 		
 	}
 }

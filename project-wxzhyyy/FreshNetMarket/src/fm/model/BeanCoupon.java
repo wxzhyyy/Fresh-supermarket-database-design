@@ -46,5 +46,24 @@ public class BeanCoupon {
 	public void setCoupon_end_time(Date coupon_end_time) {
 		this.coupon_end_time = coupon_end_time;
 	}
+	public Object getCell(int col) {
+		// TODO Auto-generated method stub
+		if (col==0) return this.coupon_id;
+		else if(col==1) return this.coupon_fit_money;
+		else if(col==2) return this.coupon_price;
+		else if(col==3) return this.coupon_start_time;
+		else if(col==4) return this.coupon_end_time;
+		return null;
+	}
+	public Object getAdminCell(int col) {
+		// TODO Auto-generated method stub
+		if (col==0) return this.coupon_id;
+		else if(col==1) return this.coupon_content;
+		else if(col==2) return this.coupon_fit_money;
+		else if(col==3) return this.coupon_price;
+		else if(col==4) return this.coupon_start_time;
+		else if(col==5) return this.coupon_end_time;
+		return null;
+	}
 	
 }

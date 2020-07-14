@@ -1,6 +1,7 @@
 package fm.model;
 
 public class BeanShippingAddress {
+	public static BeanShippingAddress currentShippingAddress=null;
 	private String addr_id;
 	private String user_id;
 	private String province;
@@ -56,6 +57,17 @@ public class BeanShippingAddress {
 	}
 	public void setPhone(String phone) {
 		this.phone = phone;
+	}
+	public Object getCell(int col) {
+		// TODO Auto-generated method stub
+		if (col==0) return this.addr_id;
+		else if(col==1) return this.province;
+		else if(col==2) return this.city;
+		else if(col==3) return this.cell; 
+		else if(col==4) return this.address;
+		else if(col==5) return this.linkman ;
+		else if(col==6) return this.phone;
+		else return "";
 	}
 	
 }

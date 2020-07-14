@@ -13,6 +13,7 @@ public class BeanUser {
 	private String user_city;
 	private Date user_regtime;
 	public static BeanUser currentLoginUser=null;
+	
 //  暂时不添加会员机制
 //	private String user_vip;
 //	private Date user_vip_endtime;

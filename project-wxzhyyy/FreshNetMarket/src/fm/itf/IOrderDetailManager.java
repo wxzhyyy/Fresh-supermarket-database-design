@@ -26,36 +26,24 @@ public interface IOrderDetailManager {
 	 * @param orderquantity
 	 * @throws BaseException
 	 */
-	public void addComdtoOrder(BeanOrder comdorder, BeanComd comd) throws BaseException;
+	public void addComdtoOrder(BeanOrder comdorder, BeanComd comd,int num) throws BaseException;
+
 	/**
-	 * 在订单在减少商品
-	 * 若商品数量大于1，则数量减一
-	 * 若商品数量小于1，则删除记录
-	 * @param orderid
-	 * @param comdid
-	 * @param orderquantity
+	 * 删除订单详情中的商品
+	 * @param od
 	 * @throws BaseException
 	 */
-	public void reduceComdtoOrder(BeanOrder comdorder, BeanComd comd) throws BaseException;
-	/**
-	 * 计算商品的原价格
-	 * @param comdorder
-	 * @param comd
-	 * @return
-	 * @throws BaseException
-	 */
-//	public float CalOriginalPriceofComd(BeanOrder comdorder, BeanComd comd) throws BaseException;
-//	/**
-//	 * 计算商品优惠后的价格
-//	 * @param comdorder
-//	 * @param comd
-//	 * @return
-//	 * @throws BaseException
-//	 */
-//	public float CalPrivilegePriceofComd(BeanOrder comdorder, BeanComd comd) throws BaseException;
-//	
+	public void deleteComdtoOrder(BeanOrderDetails od)throws BaseException;
 
 	public float CalOriginalPriceofComd(BeanOrder comdorder, BeanComd comd) throws BaseException;
 
 	public float CalPrivilegePriceofComd(BeanOrder comdorder, BeanComd comd) throws BaseException;
+	/**
+	 *修改购买商品的数量
+	 * @param od
+	 * @param num
+	 * @throws BaseException
+	 */
+	public void modifyComdOrder(BeanOrderDetails od,int num) throws BaseException;
+
 }

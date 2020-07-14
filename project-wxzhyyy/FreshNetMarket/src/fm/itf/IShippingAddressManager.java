@@ -27,7 +27,7 @@ public interface IShippingAddressManager {
 	 * @param userid
 	 * @throws BaseException
 	 */
-	public void delectShippingAddress(BeanShippingAddress sa) throws BaseException;
+	public void deleteShippingAddress(BeanShippingAddress sa) throws BaseException;
 	/**
 	 * –ﬁ∏ƒ≈‰ÀÕµÿ÷∑
 	 * @param userid

@@ -2,6 +2,10 @@ package fm.control;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.JOptionPane;
 
 import fm.itf.ICatManager;
 import fm.model.BeanCat;
@@ -25,7 +29,7 @@ public class CatManager implements ICatManager{
 			java.sql.ResultSet rs=pst.executeQuery();
 			if(rs.next()) throw new BusinessException("该类别已存在");
 			System.out.print(1);
-			sql="select max(cat_id) from category";
+			sql="select max(cat_id+0) from category";
 			pst=conn.prepareStatement(sql);
 			rs=pst.executeQuery();
 			if (rs.next()) {
@@ -72,8 +76,13 @@ public class CatManager implements ICatManager{
 			pst.setString(1, cat.getCat_id());
 			System.out.print(cat.getCat_id());
 			java.sql.ResultSet rs=pst.executeQuery();
-			System.out.print(rs.next());
-			if (rs.next())throw new BusinessException("该分类中存在商品，无法删除");
+			//System.out.print(rs.next());
+			while(rs.next()) {
+				if (rs.getString(1) != null) {
+					JOptionPane.showMessageDialog(null, "该分类中存在商品，无法删除", "提示", JOptionPane.ERROR_MESSAGE);
+					throw new BusinessException("该分类中存在商品，无法删除");
+				}
+			}
 			sql="delete from category where cat_id=?";
 			pst=conn.prepareStatement(sql);
 			pst.setString(1, cat.getCat_id());
@@ -96,18 +105,51 @@ public class CatManager implements ICatManager{
 	}
 
 	@Override
+	public List<BeanCat> loadallCat() throws BaseException {
+		// TODO Auto-generated method stub
+		List<BeanCat> result=new ArrayList<BeanCat>();
+		Connection conn=null;
+		try {
+			conn=DBUtil.getConnection();
+			String sql="select * from category";
+			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+			java.sql.ResultSet rs=pst.executeQuery();
+			while(rs.next()) {
+				BeanCat c=new BeanCat();
+				c.setCat_id(rs.getString(1));
+				c.setCat_name(rs.getString(2));
+				c.setCat_describe(rs.getString(3));
+				result.add(c);
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		}
+		finally{
+			if(conn!=null)
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		}
+		return result;
+	}
+	@Override
 	public void modifyCat(BeanCat cat, String catname, String catdescribe) throws BaseException {
 		// TODO Auto-generated method stub
 		Connection conn=null;
 		try {
 			conn=DBUtil.getConnection();
-			String sql="select * from category where cat_name=?";
+//			String sql="select * from category where cat_name=?";
+//			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+//			pst.setString(1, catname);
+//			java.sql.ResultSet rs=pst.executeQuery();
+//			if (rs.next()) throw new BusinessException("该类别已存在，无法修改");
+			String sql="update category set cat_name=?, cat_describe=? where cat_id=?";
 			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
-			pst.setString(1, catname);
-			java.sql.ResultSet rs=pst.executeQuery();
-			if (rs.next()) throw new BusinessException("该类别已存在，无法修改");
-			sql="update category set cat_name=?, cat_describe=? where cat_id=?";
-			pst=conn.prepareStatement(sql);
 			pst.setString(1, catname);
 			pst.setString(2, catdescribe);
 			pst.setString(3, cat.getCat_id());
@@ -144,5 +186,7 @@ public class CatManager implements ICatManager{
 			// TODO: handle exception
 		}
 	}
+
+
 
 }

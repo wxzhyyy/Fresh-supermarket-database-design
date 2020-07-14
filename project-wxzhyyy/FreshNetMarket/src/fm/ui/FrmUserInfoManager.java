@@ -53,7 +53,7 @@ public class FrmUserInfoManager extends JFrame {
 	 * Create the frame.
 	 */
 	public FrmUserInfoManager() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 525, 523);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
