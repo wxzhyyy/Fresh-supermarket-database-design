@@ -3,6 +3,8 @@ package fm.control;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import javax.swing.JOptionPane;
+
 import fm.itf.IUesrManager;
 import fm.model.BeanUser;
 import fm.util.BaseException;
@@ -27,12 +29,22 @@ public class UserManager implements IUesrManager {
 			conn=DBUtil.getConnection();
 			u.setUser_name(username);
 			u.setUser_pwd(pwd);
-			String sql="select max(user_id+0) from user";
+			String sql = "select * from user where user_name = ?";
+            java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setString(1, u.getUser_name());
+            java.sql.ResultSet rs = pst.executeQuery();
+            if (rs.next()) {
+                throw new BusinessException("账号以存在，请更换用户名");
+            }
+            rs.close();
+            pst.close();
+			sql="select max(user_id+0) from user";
 			//System.out.println("3");
-			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
-			java.sql.ResultSet rs=pst.executeQuery();
+			pst=conn.prepareStatement(sql);
+			rs=pst.executeQuery();
 		//	System.out.println("4");
-			if (rs.next()) {
+			rs.next();
+			if (rs.getString(1) != null) {
 			//	System.out.println("5");
 				u.setUser_id(rs.getString(1));
 				//System.out.print("5");
@@ -83,6 +95,7 @@ public class UserManager implements IUesrManager {
 			u.setUser_id(rs.getString(1));
 			u.setUser_name(rs.getString(2));
 			u.setUser_pwd(rs.getString(3));
+			BeanUser.currentLoginUser=u;
 			rs.close();
 			pst.close();
 		} catch (SQLException e) {
@@ -169,26 +182,59 @@ public class UserManager implements IUesrManager {
 				}
 		}
 	}
-	public static void main(String args[]) {
-		UserManager um=new UserManager();
+	@Override
+	public void beVIP() throws BusinessException {
+		// TODO Auto-generated method stub
+		if("1".equals(BeanUser.currentLoginUser.getUser_vip())) {
+			JOptionPane.showMessageDialog(null, "您已经是会员了", "提示", JOptionPane.WARNING_MESSAGE);
+			throw new BusinessException("您已经是会员了");
+		}
+		Connection conn=null;
 		try {
-			/*注册函数测试*/
-			um.reg("ckz", "123456", "123456");
-			System.out.print("cheng");
-			/*修改密码函数测试*/
-//			BeanUser u=new BeanUser();
-//			u.setUser_id("2");
-//			u.setUser_pwd("123456");
-//			System.out.print("cheng");
-//			um.changePwd(u, "123456", "1234567", "1234567");
-//			System.out.print("cheng");
-//			BeanUser user=new BeanUser();
-//			user.setUser_id("2");
-//			um.changeInfo(user, "bjt", "男", "19867342243", "1237453d@163.com", "湖州");
-//			System.out.print("cheng");
-		} catch (Exception e) {
-			// TODO: handle exception
+			conn=DBUtil.getConnection();
+			String sql="update user set user_vip=?, user_vip_endtime=date_add(NOW(), interval 1 MONTH) where user_id=?";
+			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+			pst.setString(1, "1");
+			pst.setString(2, BeanUser.currentLoginUser.getUser_id());
+			pst.execute();
+			JOptionPane.showMessageDialog(null, "您已成为会员", "提示", JOptionPane.WARNING_MESSAGE);
+			pst.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally{
+			if(conn!=null)
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 		}
 	}
+		
+//	public static void main(String args[]) {
+//		UserManager um=new UserManager();
+//		try {
+//			/*注册函数测试*/
+//			um.reg("ckz", "123456", "123456");
+//			System.out.print("cheng");
+//			/*修改密码函数测试*/
+////			BeanUser u=new BeanUser();
+////			u.setUser_id("2");
+////			u.setUser_pwd("123456");
+////			System.out.print("cheng");
+////			um.changePwd(u, "123456", "1234567", "1234567");
+////			System.out.print("cheng");
+////			BeanUser user=new BeanUser();
+////			user.setUser_id("2");
+////			um.changeInfo(user, "bjt", "男", "19867342243", "1237453d@163.com", "湖州");
+////			System.out.print("cheng");
+//		} catch (Exception e) {
+//			// TODO: handle exception
+//		}
+//	}
+
+	
 
 }

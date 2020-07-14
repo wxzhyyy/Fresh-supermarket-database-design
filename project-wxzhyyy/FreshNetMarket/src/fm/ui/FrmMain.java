@@ -13,6 +13,7 @@ import fm.model.BeanCat;
 import fm.model.BeanComd;
 import fm.model.BeanUser;
 import fm.util.BaseException;
+import fm.util.BusinessException;
 import freshmarket.FreshMarketUtil;
 
 import javax.swing.JMenuBar;
@@ -33,11 +34,11 @@ public class FrmMain extends JFrame implements ActionListener {
 	private	JMenu mnMineInfo = new JMenu("我的");
 	private JMenuItem mntmMyBlance = new JMenuItem("我的余额");
 	private	JMenuItem mntmNewMyCoupon = new JMenuItem("我的优惠券");
-	private	JMenuItem mntmMyVIP = new JMenuItem("我的VIP");
+	private	JMenuItem mntmMyVIP = new JMenuItem("成为VIP");
 	private	JMenuItem mntmMyIfo = new JMenuItem("个人信息");
 	private	JMenuItem mntmShippingAddr = new JMenuItem("配送地址");
 	private JMenuItem mntmOrderdetail = new JMenuItem("历史订单");
-	private JMenuItem mntmMyEval = new JMenuItem("历史评价");
+	private JMenuItem mntmMyEval = new JMenuItem("可评价商品");
 	private JMenuItem mntmSeachComd = new JMenuItem("搜索商品");
 	private JMenuItem mntmSearchMenu = new JMenuItem("搜索菜单");
 	private JMenuItem mntmChangPwd = new JMenuItem("修改密码");
@@ -235,8 +236,13 @@ public class FrmMain extends JFrame implements ActionListener {
 			dlg.setVisible(true);
 		}
 		else if (e.getSource()==this.mntmMyVIP) {
-			FrmVIPManager dlg=new FrmVIPManager();
-			dlg.setVisible(true);
+			try {
+				FreshMarketUtil.userManager.beVIP();
+			} catch (BusinessException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+
 		}
 		else if (e.getSource()==this.mntmMyIfo) {
 			FrmUserInfoManager dlg=new FrmUserInfoManager();

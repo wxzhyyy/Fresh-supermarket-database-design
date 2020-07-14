@@ -224,6 +224,7 @@ public class FrmComdDetails extends JFrame implements ActionListener{
 					e1.printStackTrace();
 				}
 			}
+			BeanOrder.cartOrder=comdorder;
 			int num = Integer.parseInt(this.textquantity.getText().trim());
 			try {
 				FreshMarketUtil.OrderDetailManager.addComdtoOrder(comdorder, comd, num);

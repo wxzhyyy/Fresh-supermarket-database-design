@@ -3,6 +3,8 @@ package fm.ui;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 
 import javax.swing.JFrame;
@@ -180,6 +182,16 @@ public class FrmShippingAddr extends JFrame implements ActionListener {
 		this.btnmodify.addActionListener(this);
 		
 		this.reloadShipAddrTable();
+		this.dataTableShipAddr.addMouseListener(new MouseAdapter (){
+			public void mouseClicked(MouseEvent e) {
+				int i=FrmShippingAddr.this.dataTableShipAddr.getSelectedRow();
+				if(i<0) {
+					JOptionPane.showMessageDialog(null, "请选择地址", "提示", JOptionPane.ERROR_MESSAGE);
+				}
+				
+			}
+	    	
+	    });
 	}
 	private void reloadShipAddrTable(){//这是测试数据，需要用实际数替换
 		try {

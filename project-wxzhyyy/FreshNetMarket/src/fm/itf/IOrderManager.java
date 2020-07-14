@@ -2,7 +2,9 @@ package fm.itf;
 
 import java.util.List;
 
+import fm.model.BeanCoupon;
 import fm.model.BeanOrder;
+import fm.model.BeanShippingAddress;
 import fm.model.BeanUser;
 import fm.util.BaseException;
 
@@ -44,5 +46,43 @@ public interface IOrderManager {
 	 * @throws BaseException
 	 */
 	public BeanOrder creatOrder() throws BaseException;
+	
+	/**
+	 * 选择订单的地址
+	 * @param or
+	 * @param sa
+	 * @throws BaseException
+	 */
+	public void addOrderAddr(BeanOrder or, BeanShippingAddress sa) throws BaseException;
+	
+	/**
+	 * 选择可用优惠券
+	 * @param or
+	 * @param cp
+	 * @throws BaseException
+	 */
+	public void addOrderCoupon(BeanOrder or,BeanCoupon cp) throws BaseException;
+	
+	/**
+	 * 计算总金额
+	 * @param or
+	 * @return
+	 * @throws BaseException
+	 */
+	public String OriginalPrice(BeanOrder or) throws BaseException;
+	
+	/**
+	 * 计算实际需支付
+	 * @param or
+	 * @return
+	 * @throws BaseException
+	 */
+	public String ActualPrice(BeanOrder or)throws BaseException;
+	/**
+	 * 
+	 * @param or
+	 * @throws BaseException
+	 */
+	public void OrderSubmit(BeanOrder or)throws BaseException;
 	
 }

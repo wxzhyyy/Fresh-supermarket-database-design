@@ -143,6 +143,7 @@ public class FrmCart extends JFrame implements ActionListener{
 				e1.printStackTrace();
 			}
 		}
+		BeanOrder.cartOrder=comdorder;
 		try {
 			CartComdList=FreshMarketUtil.OrderDetailManager.loadAll(comdorder);
 		} catch (BaseException e) {
@@ -209,6 +210,10 @@ public class FrmCart extends JFrame implements ActionListener{
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
+		}
+		else if (e.getSource()==this.btnSubmitorder) {
+			FrmSubmitOrder dlg=new FrmSubmitOrder();
+			dlg.setVisible(true);
 		}
 	}
 

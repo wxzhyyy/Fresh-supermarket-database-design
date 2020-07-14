@@ -26,7 +26,6 @@ public class CouponManager implements ICouponManager{
 		
 		Connection conn=null;
 		try {
-			
 			conn=DBUtil.getConnection();
 			String sql="select * from coupon where coupon_end_time > now()";
 			java.sql.PreparedStatement pst=conn.prepareStatement(sql);

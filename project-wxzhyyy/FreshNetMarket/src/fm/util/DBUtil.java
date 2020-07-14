@@ -5,7 +5,7 @@ import java.sql.SQLException;
 
 
 public class DBUtil {
-	private static final String jdbcUrl="jdbc:mysql://localhost:3306/freshmarket?useUnicode=true&characterEncoding=UTF-8";
+	private static final String jdbcUrl="jdbc:mysql://localhost:3306/fresh8?useUnicode=true&characterEncoding=UTF-8";
 	private static final String dbUser="root";
 	private static final String dbPwd="123456";
 	static{

@@ -1,16 +1,20 @@
 package fm.control;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import fm.itf.IFullDiscManager;
 import fm.model.BeanCoupon;
 import fm.model.BeanFullDisc;
 import fm.util.BaseException;
+import fm.util.BusinessException;
 import fm.util.DBUtil;
 import fm.util.DbException;
 
@@ -224,6 +228,50 @@ public class FullDiscManager implements IFullDiscManager{
 		} catch (BaseException e1) {
 			
 			e1.printStackTrace();
+		}
+	}
+
+	@Override
+	public void addFullDiscComd(String comdid, String discid) throws BaseException {
+		// TODO Auto-generated method stub
+		Connection conn=null;
+		try {
+			conn=DBUtil.getConnection();
+			String sql="select * from disc_ass where comd_id=?";
+			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+			pst.setString(1, comdid);
+			java.sql.ResultSet rs=pst.executeQuery();
+			if(rs.next()) {
+				JOptionPane.showMessageDialog(null, "该商品已参加满折", "提示", JOptionPane.WARNING_MESSAGE);
+				throw new BusinessException("商品已参加满折");
+			}
+			sql="select * from promotion where comd_id=?";
+			pst=conn.prepareStatement(sql);
+			pst.setString(1, comdid);
+			pst.execute();
+			if(rs.next()) {
+				JOptionPane.showMessageDialog(null, "该商品已参加促销", "提示", JOptionPane.WARNING_MESSAGE);
+				throw new BusinessException("商品已参加促销");
+			}
+			sql="insert into disc_ass(comd_id,disc_id)value(?,?)";
+			pst=conn.prepareStatement(sql);
+			pst.setString(1, comdid);
+			pst.setString(2, discid);
+			pst.execute();
+			rs.close();
+			pst.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		}
+		finally{
+			if(conn!=null)
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 		}
 	}
 }

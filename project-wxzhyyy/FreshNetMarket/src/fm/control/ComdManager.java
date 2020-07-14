@@ -151,7 +151,8 @@ public class ComdManager implements IComdManager {
 			String sql="select max(comd_id+0) from commodity";
 			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
 			java.sql.ResultSet rs=pst.executeQuery();
-			if (rs.next()) {
+			rs.next();
+			if (rs.getString(1) != null) {
 				comd.setComd_id(rs.getString(1));
 				int num = Integer.parseInt(comd.getComd_id().trim());
 				num = num +1;

@@ -32,7 +32,8 @@ public class CatManager implements ICatManager{
 			sql="select max(cat_id+0) from category";
 			pst=conn.prepareStatement(sql);
 			rs=pst.executeQuery();
-			if (rs.next()) {
+			rs.next();
+			if (rs.getString(1)!=null) {
 				cat.setCat_id(rs.getString(1));
 				int num=Integer.parseInt(cat.getCat_id().trim());
 				num=num+1;

@@ -17,7 +17,8 @@ public class FrmAdminMain extends JFrame implements ActionListener{
 	private JPanel contentPane;
 	private JMenuBar menuBar = new JMenuBar();
 	private	JMenu mnInfoMaintain = new JMenu("信息维护");
-	private	JMenuItem mntmFullDiscManager = new JMenuItem("满折管理");
+	private	JMenuItem mntmFullDiscManager = new JMenuItem("满折种类管理");
+	private	JMenuItem mntmFullDiscComdManager = new JMenuItem("满折种类管理");
 	private	JMenuItem mntmCouponManager = new JMenuItem("优惠券管理");
 	private	JMenuItem mntmComdManager = new JMenuItem("商品管理");
 	private	JMenuItem mntmPromotionManager = new JMenuItem("限时促销商品管理");
@@ -61,6 +62,7 @@ public class FrmAdminMain extends JFrame implements ActionListener{
 		mnInfoMaintain.add(mntmPromotionManager);
 		
 		this.mntmFullDiscManager.addActionListener(this);
+		this.mntmFullDiscComdManager.addActionListener(this);
 		this.mntmPromotionManager.addActionListener(this);
 		this.mntmCouponManager.addActionListener(this);
 		this.mntmComdManager.addActionListener(this);
@@ -75,6 +77,10 @@ public class FrmAdminMain extends JFrame implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		if (e.getSource()==this.mntmFullDiscManager) {
+			FrmFullDiscManager dlg=new FrmFullDiscManager();
+			dlg.setVisible(true);
+		}
+		else if (e.getSource()==this.mntmFullDiscComdManager) {
 			FrmFullDiscManager dlg=new FrmFullDiscManager();
 			dlg.setVisible(true);
 		}

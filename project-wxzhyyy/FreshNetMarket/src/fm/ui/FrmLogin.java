@@ -150,6 +150,7 @@ public class FrmLogin extends JDialog implements ActionListener{
 					BeanUser user=um.login(username);
 					if(pwd.equals(user.getUser_pwd())){
 						BeanUser.currentLoginUser=user;
+						System.out.println(BeanUser.currentLoginUser.getUser_name());
 						setVisible(false);
 					}
 					else{

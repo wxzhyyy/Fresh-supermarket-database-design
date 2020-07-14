@@ -1,6 +1,6 @@
 package fm.model;
 
-import java.sql.Date;
+import java.util.Date;
 
 
 public class BeanUser {
@@ -13,10 +13,8 @@ public class BeanUser {
 	private String user_city;
 	private Date user_regtime;
 	public static BeanUser currentLoginUser=null;
-	
-//  暂时不添加会员机制
-//	private String user_vip;
-//	private Date user_vip_endtime;
+	private String user_vip;
+	private Date user_vip_endtime;
 	public String getUser_id() {
 		return user_id;
 	}
@@ -64,5 +62,17 @@ public class BeanUser {
 	}
 	public void setUser_regtime(Date user_regtime) {
 		this.user_regtime = user_regtime;
+	}
+	public String getUser_vip() {
+		return user_vip;
+	}
+	public void setUser_vip(String user_vip) {
+		this.user_vip = user_vip;
+	}
+	public Date getUser_vip_endtime() {
+		return user_vip_endtime;
+	}
+	public void setUser_vip_endtime(Date user_vip_endtime) {
+		this.user_vip_endtime = user_vip_endtime;
 	}
 }

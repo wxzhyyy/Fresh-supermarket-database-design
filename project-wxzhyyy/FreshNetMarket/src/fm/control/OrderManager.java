@@ -8,12 +8,16 @@ import java.util.List;
 import javax.swing.JOptionPane;
 
 import fm.itf.IOrderManager;
+import fm.model.BeanCoupon;
 import fm.model.BeanOrder;
+import fm.model.BeanOrderDetails;
+import fm.model.BeanShippingAddress;
 import fm.model.BeanUser;
 import fm.util.BaseException;
 import fm.util.BusinessException;
 import fm.util.DBUtil;
 import fm.util.DbException;
+import freshmarket.FreshMarketUtil;
 
 public class OrderManager implements IOrderManager {
 
@@ -209,6 +213,224 @@ public class OrderManager implements IOrderManager {
 				}
 		}
 		return or;
+	}
+
+	@Override
+	public void addOrderAddr(BeanOrder or, BeanShippingAddress sa) throws BaseException {
+		// TODO Auto-generated method stub
+		Connection conn=null;
+		try {
+			conn=DBUtil.getConnection();
+			String sql="update commodity_order set addr_id=? where order_id=?";
+			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+			pst.setString(1, sa.getAddr_id());
+			pst.setString(2, or.getOrder_id());
+			pst.execute();
+			BeanOrder.cartOrder.setCoupon_id(sa.getAddr_id());
+			pst.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		}
+		finally{
+			if(conn!=null)
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		}
+	}
+
+	@Override
+	public void addOrderCoupon(BeanOrder or, BeanCoupon cp) throws BaseException {
+		// TODO Auto-generated method stub
+		Connection conn=null;
+		try {
+			conn=DBUtil.getConnection();
+			if(cp.getCoupon_fit_money()>or.getOriginal_price()) {
+				JOptionPane.showMessageDialog(null, "该优惠券不适用", "提示", JOptionPane.WARNING_MESSAGE);
+				throw new BusinessException("该优惠券不适用");
+			}
+			System.out.println(or.getCoupon_id());
+			if(or.getCoupon_id()!=null) {
+				JOptionPane.showMessageDialog(null, "您已选择过优惠券", "提示", JOptionPane.WARNING_MESSAGE);
+				throw new BusinessException("您已选择过优惠券");
+			}
+			float actualprice=or.getActual_price()-cp.getCoupon_price();
+			or.setActual_price(actualprice);
+			String sql="update commodity_order set coupon_id=?, actual_price=? where order_id=?";
+			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+			pst.setString(1, cp.getCoupon_id());
+			pst.setFloat(2, actualprice);
+			pst.setString(3, or.getOrder_id());
+			pst.execute();
+			BeanOrder.cartOrder.setCoupon_id(cp.getCoupon_id());
+			BeanOrder.cartOrder.setActual_price(actualprice);
+			pst.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		}
+		finally{
+			if(conn!=null)
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		}
+	}
+	
+
+	@Override
+	public String OriginalPrice(BeanOrder or) throws BaseException {
+		// TODO Auto-generated method stub
+		List<BeanOrderDetails> comdlist=new ArrayList<BeanOrderDetails>();
+		Connection conn=null;
+		float originalprice = 0;
+		String soriginalprice=null;
+		comdlist=FreshMarketUtil.OrderDetailManager.loadAll(or);
+		for (int i = 0; i < comdlist.size(); i++) {
+			BeanOrderDetails ord=comdlist.get(i);
+			float comdprice=0;
+			try {
+				conn=DBUtil.getConnection();
+				String sql="select comd_price from commodity where comd_id=?";
+				java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+				pst.setString(1, ord.getComd_id());
+				java.sql.ResultSet rs=pst.executeQuery();
+				if(rs.next()) {
+					comdprice=rs.getFloat(1);
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			float ordprice=comdprice*ord.getOrder_quantity();
+			originalprice=originalprice+ordprice;
+		}
+		try {
+			conn=DBUtil.getConnection();
+			String sql="update commodity_order set original_price=? where order_id=?";
+			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+			pst.setFloat(1, originalprice);
+			pst.setString(2, or.getOrder_id());
+			pst.execute();
+			BeanOrder.cartOrder.setOriginal_price(originalprice);
+			pst.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		}
+		finally{
+			if(conn!=null)
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		}
+		soriginalprice=Float.toString(originalprice);
+		return soriginalprice;
+	}
+
+	@Override
+	public String ActualPrice(BeanOrder or) throws BaseException {
+		// TODO Auto-generated method stub
+		List<BeanOrderDetails> comdlist=new ArrayList<BeanOrderDetails>();
+		Connection conn=null;
+		float actualprice = 0;
+		String sactualprice=null;
+		comdlist=FreshMarketUtil.OrderDetailManager.loadAll(or);
+		for (int i = 0; i < comdlist.size(); i++) {
+			BeanOrderDetails ord=comdlist.get(i);
+			float ordprice=ord.getOrder_price()*ord.getOrder_quantity();
+			actualprice=actualprice+ordprice;
+		}
+		
+		try {
+			conn=DBUtil.getConnection();
+			String sql="select coupon_id from commodity_order where order_id=?";
+			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+			pst.setString(1, or.getOrder_id());
+			java.sql.ResultSet rs=pst.executeQuery();
+			if(rs.next()) {
+				float couponprice=0;
+				BeanOrder.cartOrder.setCoupon_id(rs.getString(1));
+				sql="select coupon_price from coupon where coupon_id=?";
+				pst=conn.prepareStatement(sql);
+				pst.setString(1, BeanOrder.cartOrder.getCoupon_id());
+				rs=pst.executeQuery();
+				if(rs.next()) {
+					couponprice=rs.getFloat(1);
+				}
+				actualprice=actualprice-couponprice;
+			}
+			sql="update commodity_order set actual_price=? where order_id=?";
+			pst=conn.prepareStatement(sql);
+			pst.setFloat(1, actualprice);
+			pst.setString(2, or.getOrder_id());
+			pst.execute();
+			BeanOrder.cartOrder.setActual_price(actualprice);
+			pst.close();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		}
+		finally{
+			if(conn!=null)
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		}
+		sactualprice=Float.toString(actualprice);
+		return sactualprice;
+	}
+
+	@Override
+	public void OrderSubmit(BeanOrder or) throws BaseException {
+		// TODO Auto-generated method stub
+		Connection conn=null;
+		try {
+			conn=DBUtil.getConnection();
+			
+			String sql="select addr_id from commodity_order where order_id=?";
+			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+			pst.setString(1, or.getOrder_id());
+			java.sql.ResultSet rs=pst.executeQuery();
+			rs.next();
+			if(rs.getString(1) == null) {
+				JOptionPane.showMessageDialog(null, "请选择地址", "提示", JOptionPane.WARNING_MESSAGE);
+				throw new BusinessException("请选择地址");
+			}
+			sql="update commodity_order set order_status=? where order_id=?";
+			pst=conn.prepareStatement(sql);
+			pst.setString(1, "下单");
+			pst.setString(2, or.getOrder_id());
+			pst.execute();
+			JOptionPane.showMessageDialog(null, "下单成功", "提示", JOptionPane.WARNING_MESSAGE);
+			pst.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		}
+		finally{
+			if(conn!=null)
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		}
 	}
 	
 }

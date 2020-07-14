@@ -2,6 +2,7 @@ package fm.itf;
 
 import fm.model.BeanUser;
 import fm.util.BaseException;
+import fm.util.BusinessException;
 
 public interface IUesrManager {
 	/**
@@ -45,6 +46,10 @@ public interface IUesrManager {
 	 * @param usercity
 	 * @throws BaseException
 	 */
+	public void beVIP() throws BusinessException;
+	
+	
+	
 	public void changeInfo(BeanUser user, String username, String usersex, String userphone, String usermail, String usercity ) throws BaseException;
 
 }

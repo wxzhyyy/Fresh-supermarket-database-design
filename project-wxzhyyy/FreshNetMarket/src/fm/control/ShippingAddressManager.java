@@ -73,9 +73,8 @@ public class ShippingAddressManager implements IShippingAddressManager{
 		Connection conn=null;
 		try {
 			conn=DBUtil.getConnection();
-			String sql="select max(addr_id+0) from shipping_address where user_id=?";
+			String sql="select max(addr_id+0) from shipping_address";
 			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
-			pst.setString(1, userid);
 			java.sql.ResultSet rs=pst.executeQuery();
 			rs.next();
 			if (rs.getString(1) != null) {

@@ -34,10 +34,17 @@ public class AdminManager implements IAdminManager{
 			conn=DBUtil.getConnection();
 			u.setAdmin_name(adminname);
 			u.setAdmin_pwd(pwd);
-			String sql="select max(admin_id+0) from admin";
+			String sql = "select * from admin where admin_name = ?";
+            java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setString(1, u.getAdmin_name());
+            java.sql.ResultSet rs = pst.executeQuery();
+            if (rs.next()) {
+                throw new BusinessException("账号以存在，请更换用户名");
+            }
+			sql="select max(admin_id+0) from admin";
 			//System.out.println("3");
-			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
-			java.sql.ResultSet rs=pst.executeQuery();
+			pst=conn.prepareStatement(sql);
+			rs=pst.executeQuery();
 		//	System.out.println("4");
 			rs.next();
 			if (rs.getString(1) != null)  {

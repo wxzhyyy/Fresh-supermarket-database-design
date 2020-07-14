@@ -11,7 +11,7 @@ public class BeanOrder {
 	private Date required_delivery_time;
 	private String addr_id;
 	private String order_status;
-	private static BeanOrder catOrder=null;
+	public static BeanOrder cartOrder=null;
 	public String getOrder_id() {
 		return order_id;
 	}

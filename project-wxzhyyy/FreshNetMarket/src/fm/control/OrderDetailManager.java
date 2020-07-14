@@ -9,6 +9,7 @@ import fm.itf.IOrderDetailManager;
 import fm.model.BeanComd;
 import fm.model.BeanOrder;
 import fm.model.BeanOrderDetails;
+import fm.model.BeanUser;
 import fm.util.BaseException;
 import fm.util.DBUtil;
 import fm.util.DbException;
@@ -65,6 +66,8 @@ public class OrderDetailManager implements IOrderDetailManager{
 		String discid=null;
 		try {
 			conn=DBUtil.getConnection();
+			
+			
 			String sql="select sum(order_quantity) from order_details where disc_id=?";
 			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
 			pst.setString(1, comdorder.getOrder_id());
@@ -72,16 +75,14 @@ public class OrderDetailManager implements IOrderDetailManager{
 			if (rs.next()) {
 				currentnum=rs.getInt(1);
 			}
-			//System.out.print(currentnum);
 			//查找商品满足的满折id
 			sql="select disc_id from disc_ass where comd_id=?";
 			pst=conn.prepareStatement(sql);
 			pst.setString(1, comd.getComd_id());
 			rs=pst.executeQuery();
-			if(rs.next()) {
+			while(rs.next()) {
 				discid=rs.getString(1);
 			}
-			//System.out.print(discid);
 			//查找该满折需要满足的条件以及折扣
 			sql="select disc_fitnumber,disc_discount from full_discount where disc_id=?";
 			pst=conn.prepareStatement(sql);
@@ -93,8 +94,30 @@ public class OrderDetailManager implements IOrderDetailManager{
 				discfitnumber=rs.getInt(1);
 				discdiscount = rs.getFloat(2);
 			}
-			//System.out.println(discfitnumber);
-		//	System.out.println(discdiscount);
+			
+			
+			float orderpeice=comd.getComd_price();
+			sql="select user_vip from user where user_id=?";
+			pst=conn.prepareStatement(sql);
+			pst.setNString(1, BeanUser.currentLoginUser.getUser_id());
+			rs=pst.executeQuery();
+			rs.next();
+			if(rs.getString(1) != null) {
+				BeanUser.currentLoginUser.setUser_vip(rs.getString(1));
+				if(BeanUser.currentLoginUser.getUser_vip().equals("1")) {
+				orderpeice=comd.getComd_vip_price();
+			}
+			}
+		
+			sql="select prom_price from promotion where comd_id=?";
+			pst=conn.prepareStatement(sql);
+			pst.setString(1, comd.getPromotion_id());
+			rs=pst.executeQuery();
+			if(rs.next()) {
+				orderpeice=rs.getFloat(1);
+			}
+	
+			
 			//查找订单中已有的商品数量
 			sql="select order_quantity from order_details where order_id=? and comd_id=?";
 			pst=conn.prepareStatement(sql);
@@ -111,7 +134,7 @@ public class OrderDetailManager implements IOrderDetailManager{
 				sql="update order_details set order_quantity=?,order_price=?, order_discount=?,disc_id=?";
 				pst=conn.prepareStatement(sql);
 				pst.setInt(1, num);
-				pst.setFloat(2, comd.getComd_price());
+				pst.setFloat(2, orderpeice);
 				pst.setFloat(3, orderdiscount);
 				pst.setString(4, discid);
 				pst.execute();
@@ -129,7 +152,7 @@ public class OrderDetailManager implements IOrderDetailManager{
 				pst.setString(1, comdorder.getOrder_id());
 				pst.setString(2, comd.getComd_id());
 				pst.setInt(3, num);
-				pst.setFloat(4, comd.getComd_price());
+				pst.setFloat(4, orderpeice);
 				pst.setFloat(5, orderdiscount);
 				pst.setString(6, discid);
 			//	System.out.println("12");
@@ -220,24 +243,24 @@ public class OrderDetailManager implements IOrderDetailManager{
 		// TODO Auto-generated method stub
 		return 0;
 	}
-	
-	public static void main(String args[]) throws BaseException {
-		OrderDetailManager odm=new OrderDetailManager();
-		BeanComd comd=new BeanComd();
-		BeanOrder comdorder=new BeanOrder();
-		BeanOrderDetails od=new BeanOrderDetails();
-		String comdid="1";
-		od.setOrder_id("0");
-		od.setComd_id("1");
-		comd.setComd_id("1");
-		int num=9;
-//		comdorder.setOrder_id("1");
-//		odm.addComdtoOrder(comdorder, comd, 2);
-//		System.out.print("1");
-//		odm.deleteComdtoOrder(comdid);
-		odm.modifyComdOrder(od, num);
-		System.out.print(od.getOrder_quantity());
-	}
+//	
+//	public static void main(String args[]) throws BaseException {
+//		OrderDetailManager odm=new OrderDetailManager();
+//		BeanComd comd=new BeanComd();
+//		BeanOrder comdorder=new BeanOrder();
+//		BeanOrderDetails od=new BeanOrderDetails();
+//		String comdid="1";
+//		od.setOrder_id("0");
+//		od.setComd_id("1");
+//		comd.setComd_id("1");
+//		int num=9;
+////		comdorder.setOrder_id("1");
+////		odm.addComdtoOrder(comdorder, comd, 2);
+////		System.out.print("1");
+////		odm.deleteComdtoOrder(comdid);
+//		odm.modifyComdOrder(od, num);
+//		System.out.print(od.getOrder_quantity());
+//	}
 
 	
 

@@ -46,5 +46,11 @@ public interface IFullDiscManager {
 	 */
 	public void modifySystemFullDisc(BeanFullDisc fulldisc,String content,String number,String discount,String
 			 starttime,String endtime)throws BaseException;
-	
+	/**
+	 * ÃÌº”¬˙’€…Ã∆∑
+	 * @param comdid
+	 * @param disc_id
+	 * @throws BaseException
+	 */
+	public void addFullDiscComd(String comdid, String discid) throws BaseException;
 }
