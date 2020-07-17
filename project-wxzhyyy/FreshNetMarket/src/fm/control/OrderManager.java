@@ -417,6 +417,22 @@ public class OrderManager implements IOrderManager {
 			pst.setString(2, or.getOrder_id());
 			pst.execute();
 			JOptionPane.showMessageDialog(null, "下单成功", "提示", JOptionPane.WARNING_MESSAGE);
+			sql="SELECT comd_id,order_quantity from order_details where order_id=?";
+			pst=conn.prepareStatement(sql);
+			pst.setString(1, or.getOrder_id());
+			rs=pst.executeQuery();
+			//List<BeanOrderDetails> ordlist=new ArrayList<BeanOrderDetails>();
+			while(rs.next()) {
+				BeanOrderDetails ord=new BeanOrderDetails();
+				ord.setComd_id(rs.getString(1));
+				ord.setOrder_quantity(rs.getInt(2));
+				//ordlist.add(ord);
+				sql="UPDATE  commodity set comd_quantity=comd_quantity-? where comd_id=?";
+				pst=conn.prepareStatement(sql);			
+				pst.setInt(1, ord.getOrder_quantity());
+				pst.setString(2, ord.getComd_id());
+				pst.execute();
+			}
 			pst.close();
 		} catch (SQLException e) {
 			e.printStackTrace();

@@ -4,6 +4,7 @@ package fm.itf;
 import java.util.List;
 
 import fm.model.BeanCoupon;
+import fm.model.BeanOrder;
 import fm.model.BeanUser;
 import fm.util.BaseException;
 
@@ -67,8 +68,8 @@ public interface ICouponManager {
 	/**
 	 * 用户在订单中确认使用优惠券后该优惠券在user_coupon就会被删除
 	 * @param user
-	 * @param coupon
+	 * @param or
 	 * @throws BaseException
 	 */
-	public void useUserCoupon(BeanUser user, BeanCoupon coupon) throws BaseException;
+	public void useUserCoupon(BeanUser user, BeanOrder or) throws BaseException;
 }

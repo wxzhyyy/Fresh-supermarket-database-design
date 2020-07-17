@@ -11,6 +11,7 @@ import javax.swing.JOptionPane;
 
 import fm.itf.ICouponManager;
 import fm.model.BeanCoupon;
+import fm.model.BeanOrder;
 import fm.model.BeanUser;
 import fm.util.BaseException;
 import fm.util.BusinessException;
@@ -65,7 +66,7 @@ public class CouponManager implements ICouponManager{
 		
 		Connection conn=null;
 		try {
-			BeanCoupon cp=new BeanCoupon();
+		
 			conn=DBUtil.getConnection();
 			String sql="SELECT * FROM coupon WHERE coupon_id in"
 					+ "(SELECT coupon_id FROM user_coupon WHERE user_id=?) "
@@ -75,6 +76,7 @@ public class CouponManager implements ICouponManager{
 			java.sql.ResultSet rs=pst.executeQuery();
 			
 			while(rs.next()) {
+				BeanCoupon cp=new BeanCoupon();
 				cp.setCoupon_id(rs.getString(1));
 				cp.setCoupon_content(rs.getString(2));
 				cp.setCoupon_fit_money(rs.getFloat(3));
@@ -84,7 +86,7 @@ public class CouponManager implements ICouponManager{
 				result.add(cp);
 			}
 			
-			return result;
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DbException(e);
@@ -98,7 +100,7 @@ public class CouponManager implements ICouponManager{
 					e.printStackTrace();
 				}
 		}
-				
+		return result;	
 	}
 
 	@Override
@@ -193,7 +195,10 @@ public class CouponManager implements ICouponManager{
 			pst.setString(1, user.getUser_id());
 			pst.setString(2, coupon.getCoupon_id());
 			rs=pst.executeQuery();
-			if(rs.next()) throw new BusinessException("该优惠券您已领取");
+			if(rs.next()) {
+				JOptionPane.showMessageDialog(null,  "该优惠券您已领取","提示",JOptionPane.ERROR_MESSAGE);
+				throw new BaseException("该优惠券您已领取");
+			};
 			sql="insert into user_coupon(user_id,coupon_id) value(?,?)";
 			pst=conn.prepareStatement(sql);
 			pst.setString(1, user.getUser_id());
@@ -306,7 +311,7 @@ public class CouponManager implements ICouponManager{
 	}
 
 	@Override
-	public void useUserCoupon(BeanUser user, BeanCoupon coupon) throws BaseException {
+	public void useUserCoupon(BeanUser user, BeanOrder or) throws BaseException {
 		// TODO Auto-generated method stub
 		Connection conn=null;
 		try {
@@ -314,7 +319,7 @@ public class CouponManager implements ICouponManager{
 			String sql="delete from user_coupon where user_id=? and coupon_id=?";
 			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
 			pst.setString(1, user.getUser_id());
-			pst.setString(2, coupon.getCoupon_id());
+			pst.setString(2, or.getCoupon_id());
 			pst.execute();
 			pst.close();
 		} catch (SQLException e) {
@@ -332,41 +337,41 @@ public class CouponManager implements ICouponManager{
 		}
 	}
 	
-	public static void main(String args[]) {
-		CouponManager cpm=new CouponManager();
-		try {
-			
-		//	cpm.addSystemCoupons("满35减6元", 35, 6, "2020-07-10 09:34:10", "2020-07-17 09:30:10");
-
-			/**
-			 * loadall测试
-			 */
-			List<BeanCoupon> result=new ArrayList<BeanCoupon>();
-			result=cpm.loadAllSystemCoupons();
-			for (int i = 0; i < result.size(); i++) {
-				System.out.print(result.get(i).getCoupon_id());
-				System.out.print(result.get(i).getCoupon_content());
-				System.out.print(result.get(i).getCoupon_start_time());
-				
-			}
-			/*测试addusercoupon*/
-			BeanUser user=new BeanUser();
-			BeanCoupon coupon=new BeanCoupon();
-			user.setUser_id("1");
-			coupon.setCoupon_id("3");
+//	public static void main(String args[]) {
+//		CouponManager cpm=new CouponManager();
+//		try {
+//			
+//		//	cpm.addSystemCoupons("满35减6元", 35, 6, "2020-07-10 09:34:10", "2020-07-17 09:30:10");
+//
+//			/**
+//			 * loadall测试
+//			 */
+//			List<BeanCoupon> result=new ArrayList<BeanCoupon>();
+//			result=cpm.loadAllSystemCoupons();
+//			for (int i = 0; i < result.size(); i++) {
+//				System.out.print(result.get(i).getCoupon_id());
+//				System.out.print(result.get(i).getCoupon_content());
+//				System.out.print(result.get(i).getCoupon_start_time());
+//				
+//			}
+//			/*测试addusercoupon*/
+//			BeanUser user=new BeanUser();
+//			BeanCoupon coupon=new BeanCoupon();
+//			user.setUser_id("1");
+//			coupon.setCoupon_id("3");
+////			System.out.print("1");
+////			cpm.addUserCoupons(user, coupon);
+////			System.out.print("2");
+//			/*delete*/
+//		//	cpm.deleteSystemCoupons(coupon);
+//			
+//			//cpm.modifySystemCoupons(coupon,"满35减6元", 35, 6, "2020-07-10 09:34:10", "2020-07-17 19:30:10");
+//			cpm.useUserCoupon(user, coupon);
 //			System.out.print("1");
-//			cpm.addUserCoupons(user, coupon);
-//			System.out.print("2");
-			/*delete*/
-		//	cpm.deleteSystemCoupons(coupon);
-			
-			//cpm.modifySystemCoupons(coupon,"满35减6元", 35, 6, "2020-07-10 09:34:10", "2020-07-17 19:30:10");
-			cpm.useUserCoupon(user, coupon);
-			System.out.print("1");
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-	}
+//		} catch (Exception e) {
+//			// TODO: handle exception
+//		}
+//	}
 
 	
 }

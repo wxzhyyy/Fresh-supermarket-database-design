@@ -113,7 +113,7 @@ public class OrderDetailManager implements IOrderDetailManager{
 			pst=conn.prepareStatement(sql);
 			pst.setString(1, comd.getPromotion_id());
 			rs=pst.executeQuery();
-			if(rs.next()) {
+			while(rs.next()) {
 				orderpeice=rs.getFloat(1);
 			}
 	

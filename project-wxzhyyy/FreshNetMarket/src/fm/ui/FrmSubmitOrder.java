@@ -199,7 +199,7 @@ public class FrmSubmitOrder extends JFrame implements ActionListener{
 	}
 	private void reloadCouponTable(){//这是测试数据，需要用实际数替换
 		try {
-			allCoupon=FreshMarketUtil.CouponManager.loadAllSystemCoupons();
+			allCoupon=FreshMarketUtil.CouponManager.loadAllUserCoupons(BeanUser.currentLoginUser);
 		} catch (BaseException e) {
 			JOptionPane.showMessageDialog(null, e.getMessage(), "错误",JOptionPane.ERROR_MESSAGE);
 			return;
@@ -281,6 +281,7 @@ public class FrmSubmitOrder extends JFrame implements ActionListener{
 			BeanOrder or=BeanOrder.cartOrder;
 			try {
 				FreshMarketUtil.OrderManager.OrderSubmit(or);
+				FreshMarketUtil.CouponManager.useUserCoupon(BeanUser.currentLoginUser, or);
 			} catch (BaseException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();

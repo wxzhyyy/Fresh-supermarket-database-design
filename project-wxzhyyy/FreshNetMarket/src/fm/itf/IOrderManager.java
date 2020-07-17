@@ -85,4 +85,6 @@ public interface IOrderManager {
 	 */
 	public void OrderSubmit(BeanOrder or)throws BaseException;
 	
+	
+	
 }

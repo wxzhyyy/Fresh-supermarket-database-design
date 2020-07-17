@@ -58,6 +58,8 @@ public class PromotionManager implements IPromotionManager{
 			}else {
 				p.setPromotion_id("1");
 			}
+			
+			
 			sql="insert into promotion(promotion_id,comd_id,prom_price,prom_quantity,prom_start_time,prom_end_time) "
 					+ "value(?,?,?,?,?,?)";
 			pst=conn.prepareStatement(sql);
@@ -69,6 +71,11 @@ public class PromotionManager implements IPromotionManager{
 			pst.setTimestamp(6, new java.sql.Timestamp( le ));
 			//pst.setDate(5, new java.sql.Date( ls ));
 //			pst.setDate(6, new java.sql.Date(le));
+			pst.execute();
+			sql="update commodity set promotion_id=? where comd_id=?";
+			pst=conn.prepareStatement(sql);
+			pst.setString(1, p.getPromotion_id());
+			pst.setString(2, p.getComd_id());
 			pst.execute();
 			pst.close();
 		} catch (SQLException e) {
